@@ -108,3 +108,16 @@ docker buildx build `
   -f Dockerfile.mp3 `
   -o ./packages/core-mp3 .
 ```
+
+### Verify Build Output And Bundle Size
+
+```powershell
+Get-ChildItem -Path "packages/core-mp3/dist" -Recurse -File | ForEach-Object { Write-Host "$($_.Name): $([math]::Round($_.Length/1MB,2)) MB ($([math]::Round($_.Length/1KB,2)) KB)" }
+```
+
+### Test Build
+
+```powershell
+npx http-server -c-1 -p 3333 --cors
+```
+Navigate to test-pcm-to-mp3/index.html in your browser and select the sample.pcm file to convert it to mp3.

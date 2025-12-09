@@ -1,46 +1,63 @@
 # pcm-to-mp3-wasm
 
-A minimal FFmpeg WebAssembly build optimized for **PCM to MP3 conversion only**.
+A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3**. 
 
-## Features
-
-- **Tiny bundle size**: ~1-2MB (vs ~30MB for full ffmpeg.wasm)
-- **PCM input support**: s16le, s16be, s24le, s32le, f32le, f64le, u8
-- **MP3 output**: High-quality MP3 encoding via libmp3lame
+- ✅ **Tiny bundle**: ~2MB (vs ~30MB for full ffmpeg.wasm)
+- ✅ **Zero dependencies**: No `@ffmpeg/ffmpeg` required
+- ✅ **Non-blocking**: Runs in a Web Worker
+- ✅ **TypeScript**: Full type definitions included
 
 ## Installation
 
 ```bash
-npm install pcm-to-mp3-wasm @ffmpeg/ffmpeg
+npm install pcm-to-mp3-wasm
 ```
 
-## Usage
+## Quick Start
 
-```javascript
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import coreURL from 'pcm-to-mp3-wasm?url';
-import wasmURL from 'pcm-to-mp3-wasm/wasm?url';
+```typescript
+import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
 
-const ffmpeg = new FFmpeg();
-await ffmpeg.load({ coreURL, wasmURL });
-
-// Write PCM data (16-bit signed little-endian, mono, 44100Hz)
-ffmpeg.writeFile('audio.pcm', pcmData);
-
-// Convert to MP3
-await ffmpeg.exec([
-  '-f', 's16le',        // Input format
-  '-ar', '44100',       // Sample rate
-  '-ac', '1',           // Channels (mono)
-  '-i', 'audio.pcm',    // Input file
-  '-b:a', '128k',       // Bitrate
-  'output.mp3'          // Output file
-]);
-
-const mp3Data = await ffmpeg.readFile('output.mp3');
+// One-shot conversion (creates & terminates worker automatically)
+const mp3Data = await convertPcmToMp3(pcmData, {
+  sampleRate: 44100,
+  channels: 1,
+  bitrate: 128
+});
 ```
 
-## Supported PCM Formats
+## Reusable Converter
+
+For multiple conversions, create a reusable converter to avoid loading FFmpeg each time:
+
+```typescript
+import { createConverter } from 'pcm-to-mp3-wasm';
+
+const converter = await createConverter();
+
+// Convert multiple files efficiently
+const mp3_1 = await converter.convert(pcm1, { sampleRate: 44100 });
+const mp3_2 = await converter.convert(pcm2, { sampleRate: 22050 });
+
+// Progress tracking
+converter.onProgress((progress) => {
+  console.log(`${(progress * 100).toFixed(0)}% complete`);
+});
+
+// Clean up when done
+converter.terminate();
+```
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `sampleRate` | `number` | `44100` | Input sample rate in Hz |
+| `channels` | `number` | `1` | Number of audio channels |
+| `bitrate` | `number` | `128` | MP3 bitrate in kbps |
+| `format` | `string` | `'s16le'` | PCM format |
+
+### Supported PCM Formats
 
 | Format | Description |
 |--------|-------------|
@@ -51,6 +68,45 @@ const mp3Data = await ffmpeg.readFile('output.mp3');
 | `f32le` | 32-bit float little-endian |
 | `f64le` | 64-bit float little-endian |
 | `u8` | Unsigned 8-bit |
+
+## Framework Integration
+
+- [Next.js Integration Guide](./NEXTJS.md)
+
+## API Reference
+
+### `convertPcmToMp3(pcmData, options?)`
+
+One-shot conversion. Creates a worker, converts, and terminates.
+
+- **pcmData**: `Uint8Array` - Raw PCM audio data
+- **options**: `PcmToMp3Options` - Conversion options
+- **Returns**: `Promise<Uint8Array>` - MP3 audio data
+
+### `createConverter(config?)`
+
+Creates a reusable converter instance.
+
+- **config.coreURL**: Custom URL for ffmpeg-core.js
+- **config.wasmURL**: Custom URL for ffmpeg-core.wasm
+- **Returns**: `Promise<PcmToMp3Converter>`
+
+### `PcmToMp3Converter`
+
+Reusable converter class.
+
+- `.convert(pcmData, options?)` - Convert PCM to MP3
+- `.onProgress(callback)` - Set progress callback
+- `.onLog(callback)` - Set log callback
+- `.terminate()` - Release resources
+- `.loaded` - Whether FFmpeg is loaded
+
+## Development
+
+```bash
+cd packages/core-mp3
+npx tsc
+```
 
 ## License
 

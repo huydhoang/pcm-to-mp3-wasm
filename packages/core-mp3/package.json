@@ -1,20 +1,38 @@
 {
     "name": "pcm-to-mp3-wasm",
     "version": "0.1.0",
-    "description": "Minimal FFmpeg WASM for PCM to MP3 conversion (~1MB). A stripped-down build of ffmpeg.wasm optimized for audio encoding.",
-    "main": "./dist/umd/ffmpeg-core.js",
+    "description": "Minimal FFmpeg WASM for PCM to MP3 conversion (~2MB). Zero dependencies, Web Worker support, non-blocking.",
+    "type": "module",
+    "main": "./dist/esm/index.js",
+    "types": "./dist/esm/index.d.ts",
     "exports": {
         ".": {
+            "types": "./dist/esm/index.d.ts",
+            "import": "./dist/esm/index.js",
+            "require": "./dist/umd/index.js"
+        },
+        "./core": {
             "import": "./dist/esm/ffmpeg-core.js",
             "require": "./dist/umd/ffmpeg-core.js"
         },
         "./wasm": {
             "import": "./dist/esm/ffmpeg-core.wasm",
             "require": "./dist/umd/ffmpeg-core.wasm"
+        },
+        "./worker": {
+            "types": "./dist/esm/worker.d.ts",
+            "import": "./dist/esm/worker.js"
         }
     },
+    "scripts": {
+        "clean": "rimraf dist/esm/*.ts dist/esm/*.js.map dist/esm/*.d.ts",
+        "build:ts": "tsc",
+        "build": "npm run build:ts",
+        "prepublishOnly": "npm run build"
+    },
     "files": [
-        "dist"
+        "dist",
+        "NEXTJS.md"
     ],
     "repository": {
         "type": "git",
@@ -29,7 +47,9 @@
         "pcm",
         "encoder",
         "transcode",
-        "lame"
+        "lame",
+        "web-worker",
+        "non-blocking"
     ],
     "author": "",
     "license": "GPL-2.0-or-later",
@@ -37,10 +57,14 @@
         "url": "https://github.com/ffmpegwasm/ffmpeg.wasm/issues"
     },
     "engines": {
-        "node": ">=16.x"
+        "node": ">=18.x"
     },
     "homepage": "https://github.com/ffmpegwasm/ffmpeg.wasm#readme",
     "publishConfig": {
         "access": "public"
+    },
+    "devDependencies": {
+        "rimraf": "^5.0.0",
+        "typescript": "^5.0.0"
     }
 }
