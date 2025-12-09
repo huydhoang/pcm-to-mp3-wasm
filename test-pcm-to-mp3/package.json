@@ -1,0 +1,16 @@
+{
+    "name": "test-pcm-to-mp3",
+    "version": "1.0.0",
+    "description": "Isolated test for pcm-to-mp3-wasm",
+    "type": "module",
+    "scripts": {
+        "test": "tsx test.ts"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5"
+    },
+    "devDependencies": {
+        "tsx": "^4.7.1",
+        "@types/node": "^20.11.24"
+    }
+}

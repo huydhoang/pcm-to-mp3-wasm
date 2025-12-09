@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile-upstream:master-labs
+
+# Minimal ffmpeg.wasm build for PCM to MP3 conversion only
+# Expected output size: ~1-2MB (vs ~30MB for full build)
+
+# Base emsdk image with environment variables.
+FROM emscripten/emsdk:3.1.40 AS emsdk-base
+ARG EXTRA_CFLAGS
+ARG EXTRA_LDFLAGS
+ARG FFMPEG_ST
+ARG FFMPEG_MT
+ENV INSTALL_DIR=/opt
+ENV FFMPEG_VERSION=n5.1.4
+ENV CFLAGS="-I$INSTALL_DIR/include $EXTRA_CFLAGS"
+ENV CXXFLAGS="$CFLAGS"
+ENV LDFLAGS="-L$INSTALL_DIR/lib $EXTRA_LDFLAGS"
+ENV EM_PKG_CONFIG_PATH="$INSTALL_DIR/lib/pkgconfig:/emsdk/upstream/emscripten/system/lib/pkgconfig"
+ENV PKG_CONFIG_PATH="$EM_PKG_CONFIG_PATH"
+ENV FFMPEG_ST=$FFMPEG_ST
+ENV FFMPEG_MT=$FFMPEG_MT
+RUN apt-get update && \
+      apt-get install -y pkg-config autoconf automake libtool
+
+# Build lame (libmp3lame) - the only external library we need
+FROM emsdk-base AS lame-builder
+ENV LAME_BRANCH=master
+ADD https://github.com/ffmpegwasm/lame.git#$LAME_BRANCH /src
+COPY build/lame.sh /src/build.sh
+RUN bash -x /src/build.sh
+
+# Base ffmpeg image with only lame dependency
+FROM emsdk-base AS ffmpeg-base
+ADD https://github.com/FFmpeg/FFmpeg.git#$FFMPEG_VERSION /src
+COPY --from=lame-builder $INSTALL_DIR $INSTALL_DIR
+
+# Build ffmpeg with minimal audio-only config
+FROM ffmpeg-base AS ffmpeg-builder
+COPY build/ffmpeg-mp3.sh /src/build.sh
+RUN bash -x /src/build.sh
+
+# Build ffmpeg.wasm
+FROM ffmpeg-builder AS ffmpeg-wasm-builder
+COPY src/bind /src/src/bind
+COPY src/fftools /src/src/fftools
+COPY build/ffmpeg-wasm-mp3.sh build.sh
+# Only link lame library
+ENV FFMPEG_LIBS=-lmp3lame
+RUN mkdir -p /src/dist/umd && bash -x /src/build.sh \
+      ${FFMPEG_LIBS} \
+      -o dist/umd/ffmpeg-core.js
+RUN mkdir -p /src/dist/esm && bash -x /src/build.sh \
+      ${FFMPEG_LIBS} \
+      -sEXPORT_ES6 \
+      -o dist/esm/ffmpeg-core.js
+
+# Export ffmpeg-core.wasm to dist/
+FROM scratch AS exportor
+COPY --from=ffmpeg-wasm-builder /src/dist /dist

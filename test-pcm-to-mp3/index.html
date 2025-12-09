@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCM to MP3 WASM Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    h1 { color: #00d4ff; }
+    .card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border: 1px solid #0f3460;
+    }
+    button {
+      background: linear-gradient(135deg, #00d4ff, #0095ff);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    #log {
+      background: #0d1b2a;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.85rem;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      border: 1px solid #1b263b;
+    }
+    .success { color: #00ff88; }
+    .error { color: #ff4757; }
+    .info { color: #00d4ff; }
+    audio { width: 100%; margin-top: 1rem; }
+    input[type="file"] { margin: 1rem 0; }
+    .result { display: none; }
+    .result.show { display: block; }
+  </style>
+</head>
+<body>
+  <h1>🎵 PCM to MP3 WASM Test</h1>
+  
+  <div class="card">
+    <h3>Step 1: Load a PCM file</h3>
+    <p>Select a raw PCM file (16-bit signed, little-endian, 44100Hz, mono)</p>
+    <input type="file" id="pcmFile" accept=".pcm,.raw">
+    <div>
+      <label>Sample Rate: <input type="number" id="sampleRate" value="44100" style="width: 80px;"></label>
+      <label style="margin-left: 1rem;">Channels: <input type="number" id="channels" value="1" style="width: 50px;"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Step 2: Convert to MP3</h3>
+    <button id="convertBtn" disabled>Convert PCM to MP3</button>
+  </div>
+
+  <div class="card result" id="resultCard">
+    <h3>Result</h3>
+    <p id="stats"></p>
+    <audio id="audioPlayer" controls></audio>
+    <br><br>
+    <a id="downloadLink" download="output.mp3">
+      <button type="button">Download MP3</button>
+    </a>
+  </div>
+
+  <div class="card">
+    <h3>Log</h3>
+    <div id="log"></div>
+  </div>
+
+  <script type="module">
+    const logEl = document.getElementById('log');
+    const convertBtn = document.getElementById('convertBtn');
+    const pcmFileInput = document.getElementById('pcmFile');
+    const resultCard = document.getElementById('resultCard');
+    const statsEl = document.getElementById('stats');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const downloadLink = document.getElementById('downloadLink');
+
+    let pcmData = null;
+
+    function log(message, type = '') {
+      const line = document.createElement('div');
+      line.className = type;
+      line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logEl.appendChild(line);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // Handle file selection
+    pcmFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      log(`Loading file: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`, 'info');
+      pcmData = new Uint8Array(await file.arrayBuffer());
+      log(`PCM data loaded: ${pcmData.length} bytes`, 'success');
+      convertBtn.disabled = false;
+    });
+
+    // Handle conversion
+    convertBtn.addEventListener('click', async () => {
+      if (!pcmData) {
+        log('Please select a PCM file first', 'error');
+        return;
+      }
+
+      convertBtn.disabled = true;
+      convertBtn.textContent = 'Converting...';
+      resultCard.classList.remove('show');
+
+      try {
+        const sampleRate = parseInt(document.getElementById('sampleRate').value);
+        const channels = parseInt(document.getElementById('channels').value);
+
+        log('Loading ffmpeg.wasm...', 'info');
+        
+        // Import the ffmpeg core
+        const { default: createFFmpegCore } = await import('../packages/core-mp3/dist/esm/ffmpeg-core.js');
+        
+        log('Initializing ffmpeg core...', 'info');
+        const ffmpeg = await createFFmpegCore({
+          print: (msg) => log(`[ffmpeg] ${msg}`),
+          printErr: (msg) => log(`[ffmpeg:err] ${msg}`, 'error'),
+        });
+
+        log('ffmpeg.wasm loaded successfully!', 'success');
+
+        // Write PCM to virtual filesystem
+        const inputFile = 'input.pcm';
+        const outputFile = 'output.mp3';
+        
+        log(`Writing ${pcmData.length} bytes to virtual filesystem...`);
+        ffmpeg.FS.writeFile(inputFile, pcmData);
+
+        // Build ffmpeg command
+        const args = [
+          '-f', 's16le',
+          '-ar', String(sampleRate),
+          '-ac', String(channels),
+          '-i', inputFile,
+          '-b:a', '128k',
+          outputFile
+        ];
+
+        log(`Running: ffmpeg ${args.join(' ')}`, 'info');
+        
+        const startTime = performance.now();
+        const exitCode = ffmpeg.exec(...args);
+        const duration = performance.now() - startTime;
+
+        if (exitCode !== 0) {
+          throw new Error(`FFmpeg exited with code ${exitCode}`);
+        }
+
+        log(`Conversion completed in ${duration.toFixed(0)}ms`, 'success');
+
+        // Read output
+        const mp3Data = ffmpeg.FS.readFile(outputFile);
+        log(`MP3 size: ${mp3Data.length} bytes (${(mp3Data.length / 1024).toFixed(2)} KB)`, 'success');
+        
+        // Calculate compression ratio
+        const ratio = (pcmData.length / mp3Data.length).toFixed(2);
+        log(`Compression ratio: ${ratio}x`, 'success');
+
+        // Create blob and URLs
+        const blob = new Blob([mp3Data], { type: 'audio/mpeg' });
+        const url = URL.createObjectURL(blob);
+
+        // Update UI
+        audioPlayer.src = url;
+        downloadLink.href = url;
+        statsEl.textContent = `PCM: ${(pcmData.length / 1024).toFixed(2)} KB → MP3: ${(mp3Data.length / 1024).toFixed(2)} KB (${ratio}x compression)`;
+        resultCard.classList.add('show');
+
+        // Cleanup
+        ffmpeg.FS.unlink(inputFile);
+        ffmpeg.FS.unlink(outputFile);
+
+        log('✅ Test completed successfully!', 'success');
+
+      } catch (error) {
+        log(`Error: ${error.message}`, 'error');
+        console.error(error);
+      } finally {
+        convertBtn.disabled = false;
+        convertBtn.textContent = 'Convert PCM to MP3';
+      }
+    });
+
+    log('Ready! Select a PCM file to begin.', 'info');
+  </script>
+</body>
+</html>

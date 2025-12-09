@@ -1,0 +1,1608 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.mp3
+#1 transferring dockerfile: 2.01kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile-upstream:master-labs
+#2 DONE 0.9s
+
+#3 docker-image://docker.io/docker/dockerfile-upstream:master-labs@sha256:c0f70fe61070a39bbc609a7fa8cf5738917529d38fdf8bcac96797e97bcb1988
+#3 resolve docker.io/docker/dockerfile-upstream:master-labs@sha256:c0f70fe61070a39bbc609a7fa8cf5738917529d38fdf8bcac96797e97bcb1988 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/emscripten/emsdk:3.1.40
+#4 DONE 1.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [emsdk-base 1/2] FROM docker.io/emscripten/emsdk:3.1.40@sha256:c1e807a6e03ac5bd5b37bae2ace3c46c08579e2ddeb951037a3b8dac7067f2cc
+#7 resolve docker.io/emscripten/emsdk:3.1.40@sha256:c1e807a6e03ac5bd5b37bae2ace3c46c08579e2ddeb951037a3b8dac7067f2cc 0.0s done
+#7 DONE 0.0s
+
+#8 [lame-builder 1/3] ADD https://github.com/ffmpegwasm/lame.git#master /src
+#8 0.850 2badea1974ae36cb8312afe99cff1e6b3b5decee	refs/heads/master
+#8 DONE 0.8s
+
+#6 [internal] load build context
+#6 transferring context: 5.17kB done
+#6 DONE 0.0s
+
+#9 [ffmpeg-base 1/2] ADD https://github.com/FFmpeg/FFmpeg.git#n5.1.4 /src
+#9 0.928 80e7806be7f10c038bef2e71905e91af174c28e9	refs/tags/n5.1.4
+#9 0.928 4729204c17f756e186d622060088371d10b34f7e	refs/tags/n5.1.4^{}
+#9 DONE 0.9s
+
+#10 [lame-builder 1/3] ADD https://github.com/ffmpegwasm/lame.git#master /src
+#10 CACHED
+
+#11 [lame-builder 3/3] RUN bash -x /src/build.sh
+#11 CACHED
+
+#12 [lame-builder 2/3] COPY build/lame.sh /src/build.sh
+#12 CACHED
+
+#13 [ffmpeg-base 1/2] ADD https://github.com/FFmpeg/FFmpeg.git#n5.1.4 /src
+#13 CACHED
+
+#14 [emsdk-base 2/2] RUN apt-get update &&       apt-get install -y pkg-config autoconf automake libtool
+#14 CACHED
+
+#15 [ffmpeg-base 2/2] COPY --from=lame-builder /opt /opt
+#15 CACHED
+
+#16 [ffmpeg-builder 1/2] COPY build/ffmpeg-mp3.sh /src/build.sh
+#16 DONE 0.0s
+
+#17 [ffmpeg-builder 2/2] RUN bash -x /src/build.sh
+#17 0.217 + set -euo pipefail
+#17 0.217 + CONF_FLAGS=(--target-os=none --arch=x86_32 --enable-cross-compile --disable-asm --disable-stripping --disable-programs --disable-doc --disable-debug --disable-runtime-cpudetect --disable-autodetect --disable-avdevice --disable-postproc --disable-network --disable-encoders --disable-decoders --disable-muxers --disable-demuxers --disable-parsers --disable-bsfs --disable-protocols --disable-devices --disable-filters --enable-decoder=pcm_s16le --enable-decoder=pcm_s16be --enable-decoder=pcm_s24le --enable-decoder=pcm_s32le --enable-decoder=pcm_f32le --enable-decoder=pcm_f64le --enable-decoder=pcm_u8 --enable-encoder=libmp3lame --enable-muxer=mp3 --enable-demuxer=pcm_s16le --enable-demuxer=pcm_s16be --enable-demuxer=pcm_s24le --enable-demuxer=pcm_s32le --enable-demuxer=pcm_f32le --enable-demuxer=pcm_f64le --enable-demuxer=pcm_u8 --enable-demuxer=s16le --enable-demuxer=s16be --enable-demuxer=s24le --enable-demuxer=s32le --enable-demuxer=f32le --enable-demuxer=f64le --enable-demuxer=u8 --enable-filter=aformat --enable-filter=anull --enable-filter=aresample --enable-filter=abuffer --enable-filter=abuffersink --enable-protocol=file --enable-gpl --enable-libmp3lame --nm=emnm --ar=emar --ranlib=emranlib --cc=emcc --cxx=em++ --objcc=emcc --dep-cc=emcc --extra-cflags="$CFLAGS" --extra-cxxflags="$CXXFLAGS" ${FFMPEG_ST:+ --disable-pthreads --disable-w32threads --disable-os2threads})
+#17 0.217 + emconfigure ./configure --target-os=none --arch=x86_32 --enable-cross-compile --disable-asm --disable-stripping --disable-programs --disable-doc --disable-debug --disable-runtime-cpudetect --disable-autodetect --disable-avdevice --disable-postproc --disable-network --disable-encoders --disable-decoders --disable-muxers --disable-demuxers --disable-parsers --disable-bsfs --disable-protocols --disable-devices --disable-filters --enable-decoder=pcm_s16le --enable-decoder=pcm_s16be --enable-decoder=pcm_s24le --enable-decoder=pcm_s32le --enable-decoder=pcm_f32le --enable-decoder=pcm_f64le --enable-decoder=pcm_u8 --enable-encoder=libmp3lame --enable-muxer=mp3 --enable-demuxer=pcm_s16le --enable-demuxer=pcm_s16be --enable-demuxer=pcm_s24le --enable-demuxer=pcm_s32le --enable-demuxer=pcm_f32le --enable-demuxer=pcm_f64le --enable-demuxer=pcm_u8 --enable-demuxer=s16le --enable-demuxer=s16be --enable-demuxer=s24le --enable-demuxer=s32le --enable-demuxer=f32le --enable-demuxer=f64le --enable-demuxer=u8 --enable-filter=aformat --enable-filter=anull --enable-filter=aresample --enable-filter=abuffer --enable-filter=abuffersink --enable-protocol=file --enable-gpl --enable-libmp3lame --nm=emnm --ar=emar --ranlib=emranlib --cc=emcc --cxx=em++ --objcc=emcc --dep-cc=emcc '--extra-cflags=-I/opt/include --profiling' '--extra-cxxflags=-I/opt/include --profiling' --disable-pthreads --disable-w32threads --disable-os2threads
+#17 0.246 configure: ./configure --target-os=none --arch=x86_32 --enable-cross-compile --disable-asm --disable-stripping --disable-programs --disable-doc --disable-debug --disable-runtime-cpudetect --disable-autodetect --disable-avdevice --disable-postproc --disable-network --disable-encoders --disable-decoders --disable-muxers --disable-demuxers --disable-parsers --disable-bsfs --disable-protocols --disable-devices --disable-filters --enable-decoder=pcm_s16le --enable-decoder=pcm_s16be --enable-decoder=pcm_s24le --enable-decoder=pcm_s32le --enable-decoder=pcm_f32le --enable-decoder=pcm_f64le --enable-decoder=pcm_u8 --enable-encoder=libmp3lame --enable-muxer=mp3 --enable-demuxer=pcm_s16le --enable-demuxer=pcm_s16be --enable-demuxer=pcm_s24le --enable-demuxer=pcm_s32le --enable-demuxer=pcm_f32le --enable-demuxer=pcm_f64le --enable-demuxer=pcm_u8 --enable-demuxer=s16le --enable-demuxer=s16be --enable-demuxer=s24le --enable-demuxer=s32le --enable-demuxer=f32le --enable-demuxer=f64le --enable-demuxer=u8 --enable-filter=aformat --enable-filter=anull --enable-filter=aresample --enable-filter=abuffer --enable-filter=abuffersink --enable-protocol=file --enable-gpl --enable-libmp3lame --nm=emnm --ar=emar --ranlib=emranlib --cc=emcc --cxx=em++ --objcc=emcc --dep-cc=emcc "--extra-cflags=-I/opt/include --profiling" "--extra-cxxflags=-I/opt/include --profiling" --disable-pthreads --disable-w32threads --disable-os2threads
+#17 36.22 install prefix            /usr/local
+#17 36.22 source path               .
+#17 36.22 C compiler                emcc
+#17 36.22 C library                 
+#17 36.22 host C compiler           gcc
+#17 36.22 host C library            glibc
+#17 36.22 ARCH                      c (generic)
+#17 36.22 big-endian                no
+#17 36.22 runtime cpu detection     no
+#17 36.22 debug symbols             no
+#17 36.22 strip symbols             no
+#17 36.22 optimize for size         no
+#17 36.22 optimizations             yes
+#17 36.22 static                    yes
+#17 36.22 shared                    no
+#17 36.22 postprocessing support    no
+#17 36.22 network support           no
+#17 36.22 threading support         no
+#17 36.22 safe bitstream reader     yes
+#17 36.22 texi2html enabled         no
+#17 36.22 perl enabled              yes
+#17 36.22 pod2man enabled           yes
+#17 36.22 makeinfo enabled          no
+#17 36.22 makeinfo supports HTML    no
+#17 36.22 xmllint enabled           no
+#17 36.22 
+#17 36.22 External libraries:
+#17 36.22 iconv                   libmp3lame
+#17 36.22 
+#17 36.22 External libraries providing hardware acceleration:
+#17 36.22 
+#17 36.22 Libraries:
+#17 36.22 avcodec                 avformat                swresample
+#17 36.22 avfilter                avutil                  swscale
+#17 36.22 
+#17 36.22 Programs:
+#17 36.23 
+#17 36.23 Enabled decoders:
+#17 36.23 pcm_f32le               pcm_s16le               pcm_u8
+#17 36.23 pcm_f64le               pcm_s24le
+#17 36.23 pcm_s16be               pcm_s32le
+#17 36.23 
+#17 36.23 Enabled encoders:
+#17 36.23 libmp3lame
+#17 36.23 
+#17 36.23 Enabled hwaccels:
+#17 36.24 
+#17 36.24 Enabled parsers:
+#17 36.24 
+#17 36.24 Enabled demuxers:
+#17 36.24 pcm_f32le               pcm_s16le               pcm_u8
+#17 36.24 pcm_f64le               pcm_s24le
+#17 36.24 pcm_s16be               pcm_s32le
+#17 36.24 
+#17 36.24 Enabled muxers:
+#17 36.24 mp3
+#17 36.24 
+#17 36.24 Enabled protocols:
+#17 36.25 file
+#17 36.25 
+#17 36.25 Enabled filters:
+#17 36.25 aformat                 anull                   aresample
+#17 36.25 
+#17 36.25 Enabled bsfs:
+#17 36.25 
+#17 36.25 Enabled indevs:
+#17 36.25 
+#17 36.25 Enabled outdevs:
+#17 36.26 
+#17 36.26 License: GPL version 2 or later
+#17 36.26 
+#17 36.26 WARNING: Option --enable-demuxer=s16le did not match anything
+#17 36.26 WARNING: Option --enable-demuxer=s16be did not match anything
+#17 36.26 WARNING: Option --enable-demuxer=s24le did not match anything
+#17 36.26 WARNING: Option --enable-demuxer=s32le did not match anything
+#17 36.26 WARNING: Option --enable-demuxer=f32le did not match anything
+#17 36.26 WARNING: Option --enable-demuxer=f64le did not match anything
+#17 36.26 WARNING: Option --enable-demuxer=u8 did not match anything
+#17 36.26 WARNING: Option --enable-filter=abuffer did not match anything
+#17 36.26 WARNING: Option --enable-filter=abuffersink did not match anything
+#17 36.34 + emmake make -j
+#17 36.37 make: make -j
+#17 36.43 GEN	libavutil/libavutil.version
+#17 36.43 GEN	libswscale/libswscale.version
+#17 36.44 GEN	libswresample/libswresample.version
+#17 36.44 GEN	libavcodec/libavcodec.version
+#17 36.44 GEN	libavformat/libavformat.version
+#17 36.44 GEN	libavfilter/libavfilter.version
+#17 36.49 CC	libavfilter/af_aformat.o
+#17 36.49 CC	libavfilter/af_anull.o
+#17 36.49 CC	libavfilter/af_aresample.o
+#17 36.49 CC	libavfilter/allfilters.o
+#17 36.49 CC	libavfilter/audio.o
+#17 36.49 CC	libavfilter/avfilter.o
+#17 36.49 CC	libavfilter/avfiltergraph.o
+#17 36.49 CC	libavfilter/buffersink.o
+#17 36.49 CC	libavfilter/buffersrc.o
+#17 36.49 CC	libavfilter/colorspace.o
+#17 36.51 CC	libavfilter/drawutils.o
+#17 36.51 CC	libavfilter/fifo.o
+#17 36.53 CC	libavfilter/formats.o
+#17 36.54 CC	libavfilter/framepool.o
+#17 36.55 CC	libavfilter/framequeue.o
+#17 36.57 CC	libavfilter/graphdump.o
+#17 36.58 CC	libavfilter/version.o
+#17 36.58 CC	libavfilter/graphparser.o
+#17 36.59 CC	libavfilter/video.o
+#17 36.60 GEN	libavfilter/libavfilter.pc
+#17 36.62 CC	libavformat/allformats.o
+#17 36.62 CC	libavformat/avformat.o
+#17 36.63 CC	libavformat/avio.o
+#17 36.64 CC	libavformat/aviobuf.o
+#17 36.65 CC	libavformat/demux.o
+#17 36.65 CC	libavformat/demux_utils.o
+#17 36.65 CC	libavformat/dump.o
+#17 36.67 CC	libavformat/file.o
+#17 36.69 CC	libavformat/format.o
+#17 36.71 CC	libavformat/id3v1.o
+#17 36.71 CC	libavformat/id3v2.o
+#17 36.71 CC	libavformat/id3v2enc.o
+#17 36.71 CC	libavformat/isom_tags.o
+#17 36.72 CC	libavformat/metadata.o
+#17 36.74 libavformat/avio.c:60:137: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.74     {"rw_timeout", "Timeout for IO operations (in microseconds)", offsetof(URLContext, rw_timeout), AV_OPT_TYPE_INT64, { .i64 = 0 }, 0, INT64_MAX, AV_OPT_FLAG_ENCODING_PARAM | AV_OPT_FLAG_DECODING_PARAM },
+#17 36.74     ~                                                                                                                                   ^~~~~~~~~
+#17 36.74 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.74 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.74                     ^~~~~~~~~~~~~~~~~~
+#17 36.74 CC	libavformat/mp3enc.o
+#17 36.75 CC	libavformat/mux.o
+#17 36.76 CC	libavformat/mux_utils.o
+#17 36.76 CC	libavformat/options.o
+#17 36.79 CC	libavformat/os_support.o
+#17 36.82 CC	libavformat/pcm.o
+#17 36.83 CC	libavformat/pcmdec.o
+#17 36.84 CC	libavformat/protocols.o
+#17 36.85 1 warning generated.
+#17 36.85 CC	libavformat/rawenc.o
+#17 36.85 libavformat/demux.c:1644:40: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.85         if (bitrate >= 0 && bitrate <= INT64_MAX)
+#17 36.85                                     ~~ ^~~~~~~~~
+#17 36.85 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.85 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.85                     ^~~~~~~~~~~~~~~~~~
+#17 36.86 CC	libavformat/riff.o
+#17 36.87 CC	libavformat/sdp.o
+#17 36.88 CC	libavformat/seek.o
+#17 36.89 CC	libavformat/url.o
+#17 36.89 CC	libavformat/utils.o
+#17 36.89 CC	libavformat/version.o
+#17 36.89 libavformat/dump.c:243:55: warning: implicit conversion from 'unsigned int' to 'float' changes value from 4294967295 to 4294967296 [-Wimplicit-const-int-float-conversion]
+#17 36.89         av_log(ctx, AV_LOG_INFO, "%f", (float) peak / UINT32_MAX);
+#17 36.89                                                     ~ ^~~~~~~~~~
+#17 36.89 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:50:21: note: expanded from macro 'UINT32_MAX'
+#17 36.89 #define UINT32_MAX (0xffffffffu)
+#17 36.89                     ^~~~~~~~~~~
+#17 36.94 GEN	libavformat/libavformat.pc
+#17 36.96 CC	libavcodec/ac3_parser.o
+#17 36.96 In file included from libavformat/options.c:39:
+#17 36.96 libavformat/options_table.h:87:146: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"max_interleave_delta", "maximum buffering duration for interleaving", OFFSET(max_interleave_delta), AV_OPT_TYPE_INT64, { .i64 = 10000000 }, 0, INT64_MAX, E },
+#17 36.96 ~                                                                                                                                                ^~~~~~~~~
+#17 36.96 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.96 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.96                     ^~~~~~~~~~~~~~~~~~
+#17 36.96 In file included from libavformat/options.c:39:
+#17 36.96 libavformat/options_table.h:86:125: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"output_ts_offset", "set output timestamp offset", OFFSET(output_ts_offset), AV_OPT_TYPE_DURATION, {.i64 = 0}, -INT64_MAX, INT64_MAX, E},
+#17 36.96 ~                                                                                                                           ^~~~~~~~~
+#17 36.96 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.96 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.96                     ^~~~~~~~~~~~~~~~~~
+#17 36.96 In file included from libavformat/options.c:39:
+#17 36.96 libavformat/options_table.h:86:113: warning: implicit conversion from 'long long' to 'double' changes value from -9223372036854775807 to -9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"output_ts_offset", "set output timestamp offset", OFFSET(output_ts_offset), AV_OPT_TYPE_DURATION, {.i64 = 0}, -INT64_MAX, INT64_MAX, E},
+#17 36.96 ~                                                                                                               ^~~~~~~~~~
+#17 36.96 libavformat/options_table.h:82:159: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775806 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"skip_initial_bytes", "set number of bytes to skip before reading header and frames", OFFSET(skip_initial_bytes), AV_OPT_TYPE_INT64, {.i64 = 0}, 0, INT64_MAX-1, D},
+#17 36.96 ~                                                                                                                                                    ~~~~~~~~~^~
+#17 36.96 libavformat/options_table.h:64:156: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"start_time_realtime", "wall-clock time when stream begins (PTS==0)", OFFSET(start_time_realtime), AV_OPT_TYPE_INT64, {.i64 = AV_NOPTS_VALUE}, INT64_MIN, INT64_MAX, E},
+#17 36.96 ~                                                                                                                                                          ^~~~~~~~~
+#17 36.96 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.96 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.96                     ^~~~~~~~~~~~~~~~~~
+#17 36.96 In file included from libavformat/options.c:39:
+#17 36.96 libavformat/options_table.h:57:151: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"analyzeduration", "specify how many microseconds are analyzed to probe the input", OFFSET(max_analyze_duration), AV_OPT_TYPE_INT64, {.i64 = 0 }, 0, INT64_MAX, D},
+#17 36.96 ~                                                                                                                                                     ^~~~~~~~~
+#17 36.96 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.96 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.96                     ^~~~~~~~~~~~~~~~~~
+#17 36.96 In file included from libavformat/options.c:39:
+#17 36.96 libavformat/options_table.h:39:96: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 36.96 {"probesize", "set probing size", OFFSET(probesize), AV_OPT_TYPE_INT64, {.i64 = 5000000 }, 32, INT64_MAX, D},
+#17 36.96 ~                                                                                              ^~~~~~~~~
+#17 36.96 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 36.96 #define INT64_MAX  (0x7fffffffffffffff)
+#17 36.96                     ^~~~~~~~~~~~~~~~~~
+#17 36.96 CC	libavcodec/adts_parser.o
+#17 36.97 CC	libavcodec/allcodecs.o
+#17 36.97 CC	libavcodec/audio_frame_queue.o
+#17 36.98 CC	libavcodec/avcodec.o
+#17 36.98 CC	libavcodec/avdct.o
+#17 36.98 CC	libavcodec/avpacket.o
+#17 36.99 CC	libavcodec/bitstream.o
+#17 37.00 7 warnings generated.
+#17 37.00 CC	libavcodec/bitstream_filters.o
+#17 37.01 CC	libavcodec/bsf.o
+#17 37.01 1 warning generated.
+#17 37.02 libavformat/rawenc.cCC	libavcodec/codec_desc.o
+#17 37.03 :37:12: warning: unused function 'force_one_stream' [-Wunused-function]
+#17 37.03 static int force_one_stream(AVFormatContext *s)
+#17 37.03            ^
+#17 37.03 1 warning generated.
+#17 37.05 CC	libavcodec/codec_par.o
+#17 37.08 CC	libavcodec/d3d11va.o
+#17 37.08 CC	libavcodec/decode.o
+#17 37.10 CC	libavcodec/dirac.o
+#17 37.11 CC	libavcodec/dv_profile.o
+#17 37.11 CC	libavcodec/encode.o
+#17 37.11 CC	libavcodec/faandct.o
+#17 37.12 CC	libavcodec/faanidct.o
+#17 37.15 CC	libavcodec/fdctdsp.o
+#17 37.16 CC	libavcodec/get_buffer.o
+#17 37.17 CC	libavcodec/idctdsp.o
+#17 37.18 CC	libavcodec/imgconvert.o
+#17 37.20 CC	libavcodec/jfdctfst.o
+#17 37.23 CC	libavcodec/jfdctint.o
+#17 37.26 CC	libavcodec/jni.o
+#17 37.28 CC	libavcodec/jrevdct.o
+#17 37.29 CC	libavcodec/libmp3lame.o
+#17 37.29 CC	libavcodec/mathtables.o
+#17 37.30 CC	libavcodec/mediacodec.o
+#17 37.30 CC	libavcodec/mpeg12framerate.o
+#17 37.30 CC	libavcodec/mpegaudiodecheader.o
+#17 37.33 CC	libavcodec/mpegaudiotabs.o
+#17 37.34 CC	libavcodec/options.o
+#17 37.35 CC	libavcodec/parser.o
+#17 37.35 CC	libavcodec/parsers.o
+#17 37.35 CC	libavcodec/pcm.o
+#17 37.36 CC	libavcodec/profiles.o
+#17 37.36 CC	libavcodec/qsv_api.o
+#17 37.36 CC	libavcodec/raw.o
+#17 37.37 CC	libavcodec/simple_idct.o
+#17 37.40 CC	libavcodec/utils.o
+#17 37.41 CC	libavcodec/version.o
+#17 37.42 CC	libavcodec/vlc.o
+#17 37.42 libavcodec/libmp3lame.c:348:8: warning: 'channel_layouts' is deprecated [-Wdeprecated-declarations]
+#17 37.42     .p.channel_layouts     = (const uint64_t[]) { AV_CH_LAYOUT_MONO,
+#17 37.42        ^
+#17 37.42 libavcodec/codec.h:225:5: note: 'channel_layouts' has been explicitly marked deprecated here
+#17 37.42     attribute_deprecated
+#17 37.42     ^
+#17 37.42 ./libavutil/attributes.h:100:49: note: expanded from macro 'attribute_deprecated'
+#17 37.42 #    define attribute_deprecated __attribute__((deprecated))
+#17 37.42                                                 ^
+#17 37.43 CC	libavcodec/vorbis_parser.o
+#17 37.44 1 warning generated.
+#17 37.45 CC	libavcodec/xiph.o
+#17 37.47 1 warning generated.
+#17 37.48 CC	libavcodec/to_upper4.o
+#17 37.48 GEN	libavcodec/libavcodec.pc
+#17 37.48 CC	libswresample/audioconvert.o
+#17 37.49 CC	libswresample/dither.o
+#17 37.49 CC	libswresample/options.o
+#17 37.50 CC	libswresample/rematrix.o
+#17 37.50 CC	libswresample/resample.o
+#17 37.51 In file included from libavcodec/options.c:38:
+#17 37.51 libavcodec/options_table.h:272:116: warning: implicit conversion from 'unsigned long long' to 'double' changes value from 18446744073709551615 to 18446744073709551616 [-Wimplicit-const-int-float-conversion]
+#17 37.51 {"request_channel_layout", NULL, OFFSET(request_channel_layout), AV_OPT_TYPE_CHANNEL_LAYOUT, {.i64 = DEFAULT }, 0, UINT64_MAX, A|D, "request_channel_layout"},
+#17 37.51 ~                                                                                                                  ^~~~~~~~~~
+#17 37.51 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:51:21: note: expanded from macro 'UINT64_MAX'
+#17 37.51 #define UINT64_MAX (0xffffffffffffffffu)
+#17 37.51                     ^~~~~~~~~~~~~~~~~~~
+#17 37.51 In file included from libavcodec/options.c:38:
+#17 37.51 libavcodec/options_table.h:271:100: warning: implicit conversion from 'unsigned long long' to 'double' changes value from 18446744073709551615 to 18446744073709551616 [-Wimplicit-const-int-float-conversion]
+#17 37.51 {"channel_layout", NULL, OFFSET(channel_layout), AV_OPT_TYPE_CHANNEL_LAYOUT, {.i64 = DEFAULT }, 0, UINT64_MAX, A|E|D, "channel_layout"},
+#17 37.51 ~                                                                                                  ^~~~~~~~~~
+#17 37.51 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:51:21: note: expanded from macro 'UINT64_MAX'
+#17 37.51 #define UINT64_MAX (0xffffffffffffffffu)
+#17 37.51                     ^~~~~~~~~~~~~~~~~~~
+#17 37.51 In file included from libavcodec/options.c:38:
+#17 37.51 libavcodec/options_table.h:48:110: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.51 {"b", "set bitrate (in bits/s)", OFFSET(bit_rate), AV_OPT_TYPE_INT64, {.i64 = AV_CODEC_DEFAULT_BITRATE }, 0, INT64_MAX, A|V|E},
+#17 37.51 ~                                                                                                            ^~~~~~~~~
+#17 37.51 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.51 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.51                     ^~~~~~~~~~~~~~~~~~
+#17 37.52 CC	libswresample/resample_dsp.o
+#17 37.52 CC	libswresample/swresample.o
+#17 37.52 libavcodec/options.c:201:84: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.52 {"channel_layout", "", FOFFSET(channel_layout), AV_OPT_TYPE_INT64, {.i64 = 0 }, 0, INT64_MAX, 0},
+#17 37.52 ~                                                                                  ^~~~~~~~~
+#17 37.52 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.52 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.52                     ^~~~~~~~~~~~~~~~~~
+#17 37.52 libavcodec/options.c:195:81: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.52 {"pkt_size", "", FOFFSET(pkt_size), AV_OPT_TYPE_INT64, {.i64 = -1 }, INT64_MIN, INT64_MAX, 0},
+#17 37.52 ~                                                                               ^~~~~~~~~
+#17 37.52 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.52 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.52                     ^~~~~~~~~~~~~~~~~~
+#17 37.52 libavcodec/options.c:194:79: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.52 {"pkt_pos", "", FOFFSET(pkt_pos), AV_OPT_TYPE_INT64, {.i64 = -1 }, INT64_MIN, INT64_MAX, 0},
+#17 37.52 ~                                                                             ^~~~~~~~~
+#17 37.52 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.52 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.52                     ^~~~~~~~~~~~~~~~~~
+#17 37.52 libavcodec/options.c:193:119: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.52 {"best_effort_timestamp", "", FOFFSET(best_effort_timestamp), AV_OPT_TYPE_INT64, {.i64 = AV_NOPTS_VALUE }, INT64_MIN, INT64_MAX, 0},
+#17 37.52 ~                                                                                                                     ^~~~~~~~~
+#17 37.52 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.52 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.52                     ^~~~~~~~~~~~~~~~~~
+#17 37.53 CC	libswresample/swresample_frame.o
+#17 37.53 CC	libswresample/version.o
+#17 37.53 GEN	libswresample/libswresample.pc
+#17 37.54 CC	libswscale/alphablend.o
+#17 37.55 7 warnings generated.
+#17 37.56 CC	libswscale/gamma.o
+#17 37.56 CC	libswscale/hscale.o
+#17 37.57 CC	libswscale/hscale_fast_bilinear.o
+#17 37.57 libavcodec/pcm.c:41:20: warning: unused function 'pcm_encode_init' [-Wunused-function]
+#17 37.57 static av_cold int pcm_encode_init(AVCodecContext *avctx)
+#17 37.57                    ^
+#17 37.57 libavcodec/pcm.c:96:12: warning: unused function 'pcm_encode_frame' [-Wunused-function]
+#17 37.57 static int pcm_encode_frame(AVCodecContext *avctx, AVPacket *avpkt,
+#17 37.57            ^
+#17 37.60 CC	libswscale/input.o
+#17 37.61 CC	libswscale/options.o
+#17 37.61 2 warnings generated.
+#17 37.62 CC	libswscale/output.o
+#17 37.63 CC	libswscale/rgb2rgb.o
+#17 37.66 libswresample/options.cCC	libswscale/slice.o
+#17 37.66 :130:144: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.66                                                         , OFFSET(firstpts_in_samples), AV_OPT_TYPE_INT64 ,{.i64=AV_NOPTS_VALUE    }, INT64_MIN,INT64_MAX, PARAM },
+#17 37.66                                                                                                                                                ^~~~~~~~~
+#17 37.66 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.66 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.66                     ^~~~~~~~~~~~~~~~~~
+#17 37.66 libswresample/options.c:70:145: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.66                                                           OFFSET(user_out_ch_layout), AV_OPT_TYPE_CHANNEL_LAYOUT, {.i64=0         }, INT64_MIN, INT64_MAX, PARAM|DEPREC, "channel_layout"},
+#17 37.66                                                                                                                                                 ^~~~~~~~~
+#17 37.66 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.66 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.66                     ^~~~~~~~~~~~~~~~~~
+#17 37.66 libswresample/options.c:68:145: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.66                                                           OFFSET(user_out_ch_layout), AV_OPT_TYPE_CHANNEL_LAYOUT, {.i64=0         }, INT64_MIN, INT64_MAX, PARAM|DEPREC, "channel_layout"},
+#17 37.66                                                                                                                                                 ^~~~~~~~~
+#17 37.66 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.66 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.66                     ^~~~~~~~~~~~~~~~~~
+#17 37.66 libswresample/options.c:66:145: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.66                                                           OFFSET(user_in_ch_layout), AV_OPT_TYPE_CHANNEL_LAYOUT, {.i64=0          }, INT64_MIN, INT64_MAX, PARAM|DEPREC, "channel_layout"},
+#17 37.66                                                                                                                                                 ^~~~~~~~~
+#17 37.66 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.66 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.66                     ^~~~~~~~~~~~~~~~~~
+#17 37.66 libswresample/options.c:64:145: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 37.66                                                           OFFSET(user_in_ch_layout), AV_OPT_TYPE_CHANNEL_LAYOUT, {.i64=0          }, INT64_MIN, INT64_MAX, PARAM|DEPREC, "channel_layout"},
+#17 37.66                                                                                                                                                 ^~~~~~~~~
+#17 37.66 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#17 37.66 #define INT64_MAX  (0x7fffffffffffffff)
+#17 37.66                     ^~~~~~~~~~~~~~~~~~
+#17 37.67 5 warnings generated.
+#17 37.67 CC	libswscale/swscale_unscaled.o
+#17 37.68 CC	libswscale/swscale.o
+#17 37.70 CC	libswscale/utils.o
+#17 37.72 CC	libswscale/version.o
+#17 37.74 CC	libswscale/vscale.o
+#17 37.74 CC	libswscale/yuv2rgb.o
+#17 37.77 GEN	libswscale/libswscale.pc
+#17 37.77 CC	libavutil/adler32.o
+#17 37.78 CC	libavutil/aes.o
+#17 37.78 CC	libavutil/aes_ctr.o
+#17 37.79 CC	libavutil/audio_fifo.o
+#17 37.79 CC	libavutil/avsscanf.o
+#17 37.81 CC	libavutil/avstring.o
+#17 37.84 CC	libavutil/base64.o
+#17 37.84 CC	libavutil/blowfish.o
+#17 37.84 CC	libavutil/bprint.o
+#17 37.85 CC	libavutil/buffer.o
+#17 37.86 CC	libavutil/camellia.o
+#17 37.88 CC	libavutil/cast5.o
+#17 37.89 CC	libavutil/channel_layout.o
+#17 37.90 CC	libavutil/cpu.o
+#17 37.91 CC	libavutil/color_utils.o
+#17 37.92 CC	libavutil/crc.o
+#17 37.93 CC	libavutil/csp.o
+#17 37.97 CC	libavutil/des.o
+#17 37.98 CC	libavutil/detection_bbox.o
+#17 38.00 CC	libavutil/dict.o
+#17 38.00 CC	libavutil/display.o
+#17 38.03 CC	libavutil/dovi_meta.o
+#17 38.03 CC	libavutil/downmix_info.o
+#17 38.05 CC	libavutil/error.o
+#17 38.05 CC	libavutil/encryption_info.o
+#17 38.09 CC	libavutil/eval.o
+#17 38.11 CC	libavutil/fifo.o
+#17 38.13 libavutil/cpu.c:114:76: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#17 38.13         { "flags"   , NULL, 0, AV_OPT_TYPE_FLAGS, { .i64 = 0 }, INT64_MIN, INT64_MAX, .unit = "flags" },
+#17 38.13         ~                                                                  ^~~~~~~~~
+#17 38.13 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: CC	libavutil/file.o
+#17 38.13 expanded from macro 'INT64_MAX'
+#17 38.13 #define INT64_MAX  (0x7fffffffffffffff)
+#17 38.13                     ^~~~~~~~~~~~~~~~~~
+#17 38.14 1 warning generated.
+#17 38.14 CC	libavutil/file_open.o
+#17 38.16 CC	libavutil/film_grain_params.o
+#17 38.18 CC	libavutil/fixed_dsp.o
+#17 38.18 CC	libavutil/float_dsp.o
+#17 38.19 CC	libavutil/frame.o
+#17 38.20 CC	libavutil/hash.o
+#17 38.21 CC	libavutil/hdr_dynamic_metadata.o
+#17 38.23 CC	libavutil/hdr_dynamic_vivid_metadata.o
+#17 38.25 CC	libavutil/hmac.o
+#17 38.26 libavutil/eval.c:237:41: warning: implicit conversion from 'unsigned long long' to 'double' changes value from 18446744073709551615 to 18446744073709551616 [-Wimplicit-const-int-float-conversion]
+#17 38.26             return e->value * (r * (1.0/UINT64_MAX));
+#17 38.26                                        ~^~~~~~~~~~
+#17 38.26 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:51:21: note: expanded from macro 'UINT64_MAX'
+#17 38.26 #define UINT64_MAX (0xffffffffffffffffu)
+#17 38.26                     ^~~~~~~~~~~~~~~~~~~
+#17 38.27 CC	libavutil/hwcontext.o
+#17 38.28 CC	libavutil/hwcontext_stub.o
+#17 38.30 CC	libavutil/imgutils.o
+#17 38.31 CC	libavutil/integer.o
+#17 38.31 CC	libavutil/intmath.o
+#17 38.31 CC	libavutil/lfg.o
+#17 38.35 CC	libavutil/lls.o
+#17 38.36 CC	libavutil/log.o
+#17 38.36 CC	libavutil/log2_tab.o
+#17 38.38 1 warning generated.
+#17 38.38 CC	libavutil/lzo.o
+#17 38.39 CC	libavutil/mastering_display_metadata.o
+#17 38.39 CC	libavutil/mathematics.o
+#17 38.39 CC	libavutil/md5.o
+#17 38.39 CC	libavutil/mem.o
+#17 38.41 CC	libavutil/murmur3.o
+#17 38.43 CC	libavutil/opt.o
+#17 38.46 CC	libavutil/parseutils.o
+#17 38.49 CC	libavutil/pixdesc.o
+#17 38.51 CC	libavutil/pixelutils.o
+#17 38.53 CC	libavutil/random_seed.o
+#17 38.56 CC	libavutil/rational.o
+#17 38.58 CC	libavutil/rc4.o
+#17 38.59 CC	libavutil/reverse.o
+#17 38.60 CC	libavutil/ripemd.o
+#17 38.60 CC	libavutil/samplefmt.o
+#17 38.61 CC	libavutil/sha.o
+#17 38.62 CC	libavutil/sha512.o
+#17 38.63 CC	libavutil/slicethread.o
+#17 38.64 CC	libavutil/spherical.o
+#17 38.64 CC	libavutil/stereo3d.o
+#17 38.67 CC	libavutil/tea.o
+#17 38.68 CC	libavutil/threadmessage.o
+#17 38.71 CC	libavutil/timecode.o
+#17 38.71 CC	libavutil/time.o
+#17 38.71 CC	libavutil/tree.o
+#17 38.73 CC	libavutil/twofish.o
+#17 38.75 CC	libavutil/tx.o
+#17 38.76 CC	libavutil/tx_double.o
+#17 38.77 CC	libavutil/tx_float.o
+#17 38.81 CC	libavutil/tx_int32.o
+#17 38.82 CC	libavutil/utils.o
+#17 38.83 CC	libavutil/uuid.o
+#17 38.84 CC	libavutil/version.o
+#17 38.84 CC	libavutil/video_enc_params.o
+#17 38.84 CC	libavutil/xga_font_data.o
+#17 38.85 CC	libavutil/xtea.o
+#17 38.85 GEN	libavutil/libavutil.pc
+#17 38.88 AR	libavfilter/libavfilter.a
+#17 38.88 AR	libavformat/libavformat.a
+#17 38.91 AR	libavcodec/libavcodec.a
+#17 38.92 AR	libswresample/libswresample.a
+#17 39.36 AR	libavutil/libavutil.a
+#17 39.63 AR	libswscale/libswscale.a
+#17 DONE 39.7s
+
+#18 [ffmpeg-wasm-builder 1/5] COPY src/bind /src/src/bind
+#18 DONE 0.1s
+
+#19 [ffmpeg-wasm-builder 2/5] COPY src/fftools /src/src/fftools
+#19 DONE 0.1s
+
+#20 [ffmpeg-wasm-builder 3/5] COPY build/ffmpeg-wasm-mp3.sh build.sh
+#20 DONE 0.0s
+
+#21 [ffmpeg-wasm-builder 4/5] RUN mkdir -p /src/dist/umd && bash -x /src/build.sh       -lmp3lame       -o dist/umd/ffmpeg-core.js
+#21 0.351 + set -euo pipefail
+#21 0.351 + EXPORT_NAME=createFFmpegCore
+#21 0.351 + CONF_FLAGS=(-I. -I./src/fftools -I$INSTALL_DIR/include -L$INSTALL_DIR/lib -Llibavcodec -Llibavfilter -Llibavformat -Llibavutil -Llibswresample -Llibswscale -lavcodec -lavfilter -lavformat -lavutil -lswresample -lswscale -Wno-deprecated-declarations $LDFLAGS -sENVIRONMENT=worker -sWASM_BIGINT -sINITIAL_MEMORY=16MB -sALLOW_MEMORY_GROWTH -sSTACK_SIZE=1MB -sMODULARIZE -sEXPORT_NAME="$EXPORT_NAME" -sEXPORTED_FUNCTIONS=$(node src/bind/ffmpeg/export-mp3.js) -sEXPORTED_RUNTIME_METHODS=$(node src/bind/ffmpeg/export-runtime.js) -lworkerfs.js --pre-js src/bind/ffmpeg/bind.js src/fftools/cmdutils.c src/fftools/ffmpeg.c src/fftools/ffmpeg_filter.c src/fftools/ffmpeg_hw.c src/fftools/ffmpeg_mux.c src/fftools/ffmpeg_opt.c src/fftools/opt_common.c)
+#21 0.351 ++ node src/bind/ffmpeg/export-mp3.js
+#21 0.369 ++ node src/bind/ffmpeg/export-runtime.js
+#21 0.388 + emcc -I. -I./src/fftools -I/opt/include -L/opt/lib -Llibavcodec -Llibavfilter -Llibavformat -Llibavutil -Llibswresample -Llibswscale -lavcodec -lavfilter -lavformat -lavutil -lswresample -lswscale -Wno-deprecated-declarations -L/opt/lib -sENVIRONMENT=worker -sWASM_BIGINT -sINITIAL_MEMORY=16MB -sALLOW_MEMORY_GROWTH -sSTACK_SIZE=1MB -sMODULARIZE -sEXPORT_NAME=createFFmpegCore -sEXPORTED_FUNCTIONS=_ffmpeg,_abort,_malloc -sEXPORTED_RUNTIME_METHODS=FS,setValue,getValue,UTF8ToString,lengthBytesUTF8,stringToUTF8 -lworkerfs.js --pre-js src/bind/ffmpeg/bind.js src/fftools/cmdutils.c src/fftools/ffmpeg.c src/fftools/ffmpeg_filter.c src/fftools/ffmpeg_hw.c src/fftools/ffmpeg_mux.c src/fftools/ffmpeg_opt.c src/fftools/opt_common.c -lmp3lame -o dist/umd/ffmpeg-core.js
+#21 0.474 src/fftools/cmdutils.c:189:18: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.474     while (child = av_opt_child_class_iterate(class, &iter))
+#21 0.474            ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.474 src/fftools/cmdutils.c:189:18: note: place parentheses around the assignment to silence this warning
+#21 0.474     while (child = av_opt_child_class_iterate(class, &iter))
+#21 0.474                  ^
+#21 0.474            (                                               )
+#21 0.474 src/fftools/cmdutils.c:189:18: note: use '==' to turn this assignment into an equality comparison
+#21 0.474     while (child = av_opt_child_class_iterate(class, &iter))
+#21 0.474                  ^
+#21 0.474                  ==
+#21 0.475 src/fftools/cmdutils.c:301:79: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#21 0.475         *(int64_t *)dst = parse_number_or_die(opt, arg, OPT_INT64, INT64_MIN, INT64_MAX);
+#21 0.475                           ~~~~~~~~~~~~~~~~~~~                                 ^~~~~~~~~
+#21 0.475 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#21 0.475 #define INT64_MAX  (0x7fffffffffffffff)
+#21 0.475                     ^~~~~~~~~~~~~~~~~~
+#21 0.475 src/fftools/cmdutils.c:456:12: warning: assigning to 'const unsigned char *' from 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.475     for (p = a; *p; p++)
+#21 0.475            ^ ~
+#21 0.476 src/fftools/cmdutils.c:465:12: warning: assigning to 'const unsigned char *' from 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.476     for (p = a; *p; p++) {
+#21 0.476            ^ ~
+#21 0.478 src/fftools/cmdutils.c:925:13: warning: 4 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_ATTACHMENT'... [-Wswitch]
+#21 0.478     switch (st->codecpar->codec_type) {
+#21 0.478             ^~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.478 src/fftools/cmdutils.c:940:14: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.478     while (t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX)) {
+#21 0.478            ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.478 src/fftools/cmdutils.c:940:14: note: place parentheses around the assignment to silence this warning
+#21 0.478     while (t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX)) {
+#21 0.478              ^
+#21 0.478            (                                                  )
+#21 0.478 src/fftools/cmdutils.c:940:14: note: use '==' to turn this assignment into an equality comparison
+#21 0.478     while (t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX)) {
+#21 0.478              ^
+#21 0.478              ==
+#21 0.489 6 warnings generated.
+#21 0.516 src/fftools/ffmpeg.c:272:18: warning: assigning to 'int8_t *' (aka 'signed char *') from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types with different sign [-Wpointer-sign]
+#21 0.516     dst          = frame->data    [0];
+#21 0.516                  ^ ~~~~~~~~~~~~~~~~~~
+#21 0.516 src/fftools/ffmpeg.c:275:29: warning: passing 'int8_t *' (aka 'signed char *') to parameter of type 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types with different sign [-Wpointer-sign]
+#21 0.516         sub2video_copy_rect(dst, dst_linesize, frame->width, frame->height, sub->rects[i]);
+#21 0.516                             ^~~
+#21 0.516 src/fftools/ffmpeg.c:192:42: note: passing argument to parameter 'dst' here
+#21 0.516 static void sub2video_copy_rect(uint8_t *dst, int dst_linesize, int w, int h,
+#21 0.516                                          ^
+#21 0.517 src/fftools/ffmpeg.c:345:41: warning: macro 'ATOMIC_VAR_INIT' has been marked as deprecated [-Wdeprecated-pragma]
+#21 0.517 static atomic_int transcode_init_done = ATOMIC_VAR_INIT(0);
+#21 0.517                                         ^
+#21 0.517 /emsdk/upstream/lib/clang/17/include/stdatomic.h:61:41: note: macro marked 'deprecated' here
+#21 0.517 #pragma clang deprecated(ATOMIC_VAR_INIT)
+#21 0.517                                         ^
+#21 0.522 src/fftools/ffmpeg.c:1724:35: warning: passing 'char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.522         avio_write(progress_avio, buf_script.str,
+#21 0.522                                   ^~~~~~~~~~~~~~
+#21 0.522 ./libavformat/avio.h:428:54: note: passing argument to parameter 'buf' here
+#21 0.522 void avio_write(AVIOContext *s, const unsigned char *buf, int size);
+#21 0.522                                                      ^
+#21 0.523 src/fftools/ffmpeg.c:1977:13: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#21 0.523     switch (ifilter->ist->st->codecpar->codec_type) {
+#21 0.523             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.523 src/fftools/ffmpeg.c:1995:12: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.523     if (sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DISPLAYMATRIX)) {
+#21 0.523         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.523 src/fftools/ffmpeg.c:1995:12: note: place parentheses around the assignment to silence this warning
+#21 0.523     if (sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DISPLAYMATRIX)) {
+#21 0.523            ^
+#21 0.523         (                                                              )
+#21 0.523 src/fftools/ffmpeg.c:1995:12: note: use '==' to turn this assignment into an equality comparison
+#21 0.523     if (sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DISPLAYMATRIX)) {
+#21 0.523            ^
+#21 0.523            ==
+#21 0.526 src/fftools/ffmpeg.c:2536:17: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#21 0.526         switch (ist->dec_ctx->codec_type) {
+#21 0.526                 ^~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.527 src/fftools/ffmpeg.c:2819:13: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#21 0.527     switch (par_dst->codec_type) {
+#21 0.527             ^~~~~~~~~~~~~~~~~~~
+#21 0.527 src/fftools/ffmpeg.c:2886:20: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.527         av_strlcpy(encoder_string, LIBAVCODEC_IDENT " ", encoder_string_len);
+#21 0.527                    ^~~~~~~~~~~~~~
+#21 0.527 ./libavutil/avstring.h:101:25: note: passing argument to parameter 'dst' here
+#21 0.527 size_t av_strlcpy(char *dst, const char *src, size_t size);
+#21 0.527                         ^
+#21 0.527 src/fftools/ffmpeg.c:2888:20: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.527         av_strlcpy(encoder_string, "Lavc ", encoder_string_len);
+#21 0.527                    ^~~~~~~~~~~~~~
+#21 0.527 ./libavutil/avstring.h:101:25: note: passing argument to parameter 'dst' here
+#21 0.527 size_t av_strlcpy(char *dst, const char *src, size_t size);
+#21 0.527                         ^
+#21 0.527 src/fftools/ffmpeg.c:2889:16: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.527     av_strlcat(encoder_string, ost->enc->name, encoder_string_len);
+#21 0.527                ^~~~~~~~~~~~~~
+#21 0.527 ./libavutil/avstring.h:119:25: note: passing argument to parameter 'dst' here
+#21 0.527 size_t av_strlcat(char *dst, const char *src, size_t size);
+#21 0.527                         ^
+#21 0.527 src/fftools/ffmpeg.c:2890:49: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.527     av_dict_set(&ost->st->metadata, "encoder",  encoder_string,
+#21 0.527                                                 ^~~~~~~~~~~~~~
+#21 0.527 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#21 0.527 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.527                                                                 ^
+#21 0.529 src/fftools/ffmpeg.c:3254:49: warning: passing 'uint32_t *' (aka 'unsigned int *') to parameter of type 'int32_t *' (aka 'int *') converts between pointers to integer types with different sign [-Wpointer-sign]
+#21 0.529                         av_display_rotation_set((uint32_t *)dst, 0);
+#21 0.529                                                 ^~~~~~~~~~~~~~~
+#21 0.529 ./libavutil/display.h:97:38: note: passing argument to parameter 'matrix' here
+#21 0.529 void av_display_rotation_set(int32_t matrix[9], double angle);
+#21 0.529                                      ^
+#21 0.534 src/fftools/ffmpeg.c:4586:25: warning: macro 'ATOMIC_VAR_INIT' has been marked as deprecated [-Wdeprecated-pragma]
+#21 0.534   transcode_init_done = ATOMIC_VAR_INIT(0);
+#21 0.534                         ^
+#21 0.534 /emsdk/upstream/lib/clang/17/include/stdatomic.h:61:41: note: macro marked 'deprecated' here
+#21 0.534 #pragma clang deprecated(ATOMIC_VAR_INIT)
+#21 0.534                                         ^
+#21 0.591 14 warnings generated.
+#21 0.615 src/fftools/ffmpeg_filter.c:305:21: warning: assigning to 'uint8_t *' (aka 'unsigned char *') from 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.615     ifilter->name   = describe_filter_link(fg, in, 1);
+#21 0.615                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.615 src/fftools/ffmpeg_filter.c:342:26: warning: assigning to 'uint8_t *' (aka 'unsigned char *') from 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.615         ofilter->name    = describe_filter_link(fg, cur, 0);
+#21 0.615                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.617 src/fftools/ffmpeg_filter.c:894:35: warning: floating-point comparison is always true; constant cannot be represented exactly in type 'float' [-Wliteral-range]
+#21 0.617         if (audio_drift_threshold != 0.1)
+#21 0.617             ~~~~~~~~~~~~~~~~~~~~~ ^  ~~~
+#21 0.633 3 warnings generated.
+#21 0.711 src/fftools/ffmpeg_opt.c:353:87: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#21 0.711         { "abort_on"           , NULL, 0, AV_OPT_TYPE_FLAGS, { .i64 = 0 }, INT64_MIN, INT64_MAX,           .unit = "flags" },
+#21 0.711         ~                                                                             ^~~~~~~~~
+#21 0.711 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#21 0.711 #define INT64_MAX  (0x7fffffffffffffff)
+#21 0.711                     ^~~~~~~~~~~~~~~~~~
+#21 0.711 src/fftools/ffmpeg_opt.c:427:14: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.711     if (sync = strchr(map, ',')) {
+#21 0.711         ~~~~~^~~~~~~~~~~~~~~~~~
+#21 0.711 src/fftools/ffmpeg_opt.c:427:14: note: place parentheses around the assignment to silence this warning
+#21 0.711     if (sync = strchr(map, ',')) {
+#21 0.711              ^
+#21 0.711         (                      )
+#21 0.711 src/fftools/ffmpeg_opt.c:427:14: note: use '==' to turn this assignment into an equality comparison
+#21 0.711     if (sync = strchr(map, ',')) {
+#21 0.711              ^
+#21 0.711              ==
+#21 0.711 src/fftools/ffmpeg_opt.c:466:26: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.711         if (allow_unused = strchr(map, '?'))
+#21 0.711             ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+#21 0.711 src/fftools/ffmpeg_opt.c:466:26: note: place parentheses around the assignment to silence this warning
+#21 0.711         if (allow_unused = strchr(map, '?'))
+#21 0.711                          ^
+#21 0.711             (                              )
+#21 0.711 src/fftools/ffmpeg_opt.c:466:26: note: use '==' to turn this assignment into an equality comparison
+#21 0.711         if (allow_unused = strchr(map, '?'))
+#21 0.711                          ^
+#21 0.711                          ==
+#21 0.712 src/fftools/ffmpeg_opt.c:592:22: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.712     if (allow_unused = strchr(mapchan, '?'))
+#21 0.712         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+#21 0.712 src/fftools/ffmpeg_opt.c:592:22: note: place parentheses around the assignment to silence this warning
+#21 0.712     if (allow_unused = strchr(mapchan, '?'))
+#21 0.712                      ^
+#21 0.712         (                                  )
+#21 0.712 src/fftools/ffmpeg_opt.c:592:22: note: use '==' to turn this assignment into an equality comparison
+#21 0.712     if (allow_unused = strchr(mapchan, '?'))
+#21 0.712                      ^
+#21 0.712                      ==
+#21 0.713 src/fftools/ffmpeg_opt.c:851:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.713     MATCH_PER_STREAM_OPT(codec_names, str, codec_name, s, st);
+#21 0.713     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.713 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.713             outvar = o->name[i].u.type;\
+#21 0.713                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.713 src/fftools/ffmpeg_opt.c:898:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.713         MATCH_PER_STREAM_OPT(codec_tags, str, codec_tag, ic, st);
+#21 0.713         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.713 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.713             outvar = o->name[i].u.type;\
+#21 0.713                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:912:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.714         MATCH_PER_STREAM_OPT(discard, str, discard_str, ic, st);
+#21 0.714         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.714             outvar = o->name[i].u.type;\
+#21 0.714                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:961:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.714             MATCH_PER_STREAM_OPT(frame_rates, str, framerate, ic, st);
+#21 0.714             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.714             outvar = o->name[i].u.type;\
+#21 0.714                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:972:13: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.714             MATCH_PER_STREAM_OPT(hwaccels, str, hwaccel, ic, st);
+#21 0.714             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.714             outvar = o->name[i].u.type;\
+#21 0.714                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:973:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.714             MATCH_PER_STREAM_OPT(hwaccel_output_formats, str,
+#21 0.714             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.714 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.714             outvar = o->name[i].u.type;\
+#21 0.714                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.715 src/fftools/ffmpeg_opt.c:1029:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.715             MATCH_PER_STREAM_OPT(hwaccel_devices, str, hwaccel_device, ic, st);
+#21 0.715             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.715 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.715             outvar = o->name[i].u.type;\
+#21 0.715                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.715 src/fftools/ffmpeg_opt.c:1050:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.715             MATCH_PER_STREAM_OPT(canvas_sizes, str, canvas_size, ic, st);
+#21 0.715             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.715 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.715             outvar = o->name[i].u.type;\
+#21 0.715                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:1215:58: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716             av_dict_set(&o->g->format_opts, "ch_layout", o->audio_ch_layouts[o->nb_audio_ch_layouts - 1].u.str, 0);
+#21 0.716                                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#21 0.716 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.716                                                                 ^
+#21 0.716 src/fftools/ffmpeg_opt.c:1226:25: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716                         o->frame_rates[o->nb_frame_rates - 1].u.str, 0);
+#21 0.716                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#21 0.716 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.716                                                                 ^
+#21 0.716 src/fftools/ffmpeg_opt.c:1230:55: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716         av_dict_set(&o->g->format_opts, "video_size", o->frame_sizes[o->nb_frame_sizes - 1].u.str, 0);
+#21 0.716                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#21 0.716 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.716                                                                 ^
+#21 0.716 src/fftools/ffmpeg_opt.c:1233:57: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716         av_dict_set(&o->g->format_opts, "pixel_format", o->frame_pix_fmts[o->nb_frame_pix_fmts - 1].u.str, 0);
+#21 0.716                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#21 0.716 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.716                                                                 ^
+#21 0.716 src/fftools/ffmpeg_opt.c:1235:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716     MATCH_PER_TYPE_OPT(codec_names, str,    video_codec_name, ic, "v");
+#21 0.716     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#21 0.716             outvar = o->name[i].u.type;\
+#21 0.716                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:1236:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716     MATCH_PER_TYPE_OPT(codec_names, str,    audio_codec_name, ic, "a");
+#21 0.716     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#21 0.716             outvar = o->name[i].u.type;\
+#21 0.716                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:1237:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716     MATCH_PER_TYPE_OPT(codec_names, str, subtitle_codec_name, ic, "s");
+#21 0.716     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#21 0.716             outvar = o->name[i].u.type;\
+#21 0.716                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:1238:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.716     MATCH_PER_TYPE_OPT(codec_names, str,     data_codec_name, ic, "d");
+#21 0.716     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.716 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#21 0.716             outvar = o->name[i].u.type;\
+#21 0.716                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.717 src/fftools/ffmpeg_opt.c:1433:37: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.717                 dump_attachment(st, o->dump_attachment[i].u.str);
+#21 0.717                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.717 src/fftools/ffmpeg_opt.c:1116:55: note: passing argument to parameter 'filename' here
+#21 0.717 static void dump_attachment(AVStream *st, const char *filename)
+#21 0.717                                                       ^
+#21 0.718 src/fftools/ffmpeg_opt.c:1492:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.718         MATCH_PER_STREAM_OPT(codec_names, str, codec_name, s, ost->st);
+#21 0.718         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.718 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.718             outvar = o->name[i].u.type;\
+#21 0.718                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.718 src/fftools/ffmpeg_opt.c:1581:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.718         MATCH_PER_STREAM_OPT(presets, str, preset, oc, st);
+#21 0.718         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.718 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.718             outvar = o->name[i].u.type;\
+#21 0.718                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.718 src/fftools/ffmpeg_opt.c:1616:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.718     MATCH_PER_STREAM_OPT(time_bases, str, time_base, oc, st);
+#21 0.718     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.718 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.718             outvar = o->name[i].u.type;\
+#21 0.718                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.719 src/fftools/ffmpeg_opt.c:1627:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.719     MATCH_PER_STREAM_OPT(enc_time_bases, str, time_base, oc, st);
+#21 0.719     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.719 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.719             outvar = o->name[i].u.type;\
+#21 0.719                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.719 src/fftools/ffmpeg_opt.c:1651:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.719     MATCH_PER_STREAM_OPT(bitstream_filters, str, bsfs, oc, st);
+#21 0.719     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.719 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.719             outvar = o->name[i].u.type;\
+#21 0.719                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.719 src/fftools/ffmpeg_opt.c:1660:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.719     MATCH_PER_STREAM_OPT(codec_tags, str, codec_tag, oc, st);
+#21 0.719     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.719 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.719             outvar = o->name[i].u.type;\
+#21 0.719                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.720 src/fftools/ffmpeg_opt.c:1675:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.720     MATCH_PER_STREAM_OPT(disposition, str, ost->disposition, oc, st);
+#21 0.720     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.720 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.720             outvar = o->name[i].u.type;\
+#21 0.720                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:1804:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.721     MATCH_PER_STREAM_OPT(frame_rates, str, frame_rate, oc, st);
+#21 0.721     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.721             outvar = o->name[i].u.type;\
+#21 0.721                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:1810:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.721     MATCH_PER_STREAM_OPT(max_frame_rates, str, max_frame_rate, oc, st);
+#21 0.721     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.721             outvar = o->name[i].u.type;\
+#21 0.721                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:1825:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.721     MATCH_PER_STREAM_OPT(frame_aspect_ratios, str, frame_aspect_ratio, oc, st);
+#21 0.721     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.721             outvar = o->name[i].u.type;\
+#21 0.721                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:1836:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.721     MATCH_PER_STREAM_OPT(filter_scripts, str, ost->filters_script, oc, st);
+#21 0.721     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.721             outvar = o->name[i].u.type;\
+#21 0.721                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:1837:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.721     MATCH_PER_STREAM_OPT(filters,        str, ost->filters,        oc, st);
+#21 0.721     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.721 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.721             outvar = o->name[i].u.type;\
+#21 0.721                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:1848:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.722         MATCH_PER_STREAM_OPT(frame_sizes, str, frame_size, oc, st);
+#21 0.722         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.722             outvar = o->name[i].u.type;\
+#21 0.722                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:1854:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.722         MATCH_PER_STREAM_OPT(frame_pix_fmts, str, frame_pix_fmt, oc, st);
+#21 0.722         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.722             outvar = o->name[i].u.type;\
+#21 0.722                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:1866:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.722         MATCH_PER_STREAM_OPT(intra_matrices, str, intra_matrix, oc, st);
+#21 0.722         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.722             outvar = o->name[i].u.type;\
+#21 0.722                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:1874:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.722         MATCH_PER_STREAM_OPT(chroma_intra_matrices, str, chroma_intra_matrix, oc, st);
+#21 0.722         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.722 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.722             outvar = o->name[i].u.type;\
+#21 0.722                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.723 src/fftools/ffmpeg_opt.c:1884:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.723         MATCH_PER_STREAM_OPT(inter_matrices, str, inter_matrix, oc, st);
+#21 0.723         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.723 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.723             outvar = o->name[i].u.type;\
+#21 0.723                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.723 src/fftools/ffmpeg_opt.c:1893:9: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.723         MATCH_PER_STREAM_OPT(rc_overrides, str, p, oc, st);
+#21 0.723         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.723 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.723             outvar = o->name[i].u.type;\
+#21 0.723                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.723 src/fftools/ffmpeg_opt.c:1939:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.723         MATCH_PER_STREAM_OPT(passlogfiles, str, ost->logfile_prefix, oc, st);
+#21 0.723         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.723 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.723             outvar = o->name[i].u.type;\
+#21 0.723                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.724 src/fftools/ffmpeg_opt.c:1978:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.724         MATCH_PER_STREAM_OPT(forced_key_frames, str, ost->forced_keyframes, oc, st);
+#21 0.724         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.724 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.724             outvar = o->name[i].u.type;\
+#21 0.724                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.724 src/fftools/ffmpeg_opt.c:1988:9: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.724         MATCH_PER_STREAM_OPT(fps_mode, str, ost->fps_mode, oc, st);
+#21 0.724         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.724 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.724             outvar = o->name[i].u.type;\
+#21 0.724                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.725 src/fftools/ffmpeg_opt.c:2044:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.725     MATCH_PER_STREAM_OPT(filter_scripts, str, ost->filters_script, oc, st);
+#21 0.725     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.725 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.725             outvar = o->name[i].u.type;\
+#21 0.725                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.725 src/fftools/ffmpeg_opt.c:2045:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.725     MATCH_PER_STREAM_OPT(filters,        str, ost->filters,        oc, st);
+#21 0.725     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.725 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.725             outvar = o->name[i].u.type;\
+#21 0.725                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.725 src/fftools/ffmpeg_opt.c:2058:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.725         MATCH_PER_STREAM_OPT(audio_ch_layouts, str, layout, oc, st);
+#21 0.725         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.725 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.725             outvar = o->name[i].u.type;\
+#21 0.725                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.726 src/fftools/ffmpeg_opt.c:2079:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.726         MATCH_PER_STREAM_OPT(sample_fmts, str, sample_fmt, oc, st);
+#21 0.726         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.726 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.726             outvar = o->name[i].u.type;\
+#21 0.726                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.726 src/fftools/ffmpeg_opt.c:2088:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.726         MATCH_PER_STREAM_OPT(apad, str, ost->apad, oc, st);
+#21 0.726         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.726 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.726             outvar = o->name[i].u.type;\
+#21 0.726                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.727 src/fftools/ffmpeg_opt.c:2180:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.727         MATCH_PER_STREAM_OPT(frame_sizes, str, frame_size, oc, st);
+#21 0.727         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.727 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#21 0.727             outvar = o->name[i].u.type;\
+#21 0.727                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.728 src/fftools/ffmpeg_opt.c:2476:21: warning: 4 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_ATTACHMENT'... [-Wswitch]
+#21 0.728             switch (ofilter->type) {
+#21 0.728                     ^~~~~~~~~~~~~
+#21 0.728 src/fftools/ffmpeg_opt.c:2560:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.728         MATCH_PER_TYPE_OPT(codec_names, str, subtitle_codec_name, oc, "s");
+#21 0.728         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.728 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#21 0.728             outvar = o->name[i].u.type;\
+#21 0.728                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.730 src/fftools/ffmpeg_opt.c:2791:21: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#21 0.730             switch (ost->enc_ctx->codec_type) {
+#21 0.730                     ^~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.730 src/fftools/ffmpeg_opt.c:2859:36: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.730         int in_file_index = strtol(o->metadata_map[i].u.str, &p, 0);
+#21 0.730                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.730 /emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h:32:36: note: passing argument to parameter here
+#21 0.730 long strtol (const char *__restrict, char **__restrict, int);
+#21 0.730                                    ^
+#21 0.730 src/fftools/ffmpeg_opt.c:2915:21: warning: initializing 'const char *' with an expression of type 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.730         const char *p = o->program[i].u.str;
+#21 0.730                     ^   ~~~~~~~~~~~~~~~~~~~
+#21 0.730 src/fftools/ffmpeg_opt.c:2944:11: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.730         p = o->program[i].u.str;
+#21 0.730           ^ ~~~~~~~~~~~~~~~~~~~
+#21 0.730 src/fftools/ffmpeg_opt.c:2986:22: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.730         val = strchr(o->metadata[i].u.str, '=');
+#21 0.730                      ^~~~~~~~~~~~~~~~~~~~
+#21 0.730 /emsdk/upstream/emscripten/cache/sysroot/include/string.h:45:27: note: passing argument to parameter here
+#21 0.730 char *strchr (const char *, int);
+#21 0.730                           ^
+#21 0.730 src/fftools/ffmpeg_opt.c:2999:33: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.730                     if (!strcmp(o->metadata[i].u.str, "rotate")) {
+#21 0.730                                 ^~~~~~~~~~~~~~~~~~~~
+#21 0.730 /emsdk/upstream/emscripten/cache/sysroot/include/string.h:39:25: note: passing argument to parameter here
+#21 0.730 int strcmp (const char *, const char *);
+#21 0.730                         ^
+#21 0.730 src/fftools/ffmpeg_opt.c:3007:64: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.730                         av_dict_set(&oc->streams[j]->metadata, o->metadata[i].u.str, *val ? val : NULL, 0);
+#21 0.730                                                                ^~~~~~~~~~~~~~~~~~~~
+#21 0.730 ./libavutil/dict.h:128:48: note: passing argument to parameter 'key' here
+#21 0.731 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.731                                                ^
+#21 0.731 src/fftools/ffmpeg_opt.c:3036:28: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.731             av_dict_set(m, o->metadata[i].u.str, *val ? val : NULL, 0);
+#21 0.731                            ^~~~~~~~~~~~~~~~~~~~
+#21 0.731 ./libavutil/dict.h:128:48: note: passing argument to parameter 'key' here
+#21 0.731 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#21 0.731                                                ^
+#21 0.732 src/fftools/ffmpeg_opt.c:3262:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.732     MATCH_PER_TYPE_OPT(codec_names, str, codec_name, NULL, tmp_line);
+#21 0.732     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.732 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#21 0.732             outvar = o->name[i].u.type;\
+#21 0.732                    ^ ~~~~~~~~~~~~~~~~~
+#21 0.733 src/fftools/ffmpeg_opt.c:3604:26: warning: passing 'uint8_t[128]' (aka 'unsigned char[128]') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#21 0.733         av_strerror(ret, error, sizeof(error));
+#21 0.733                          ^~~~~
+#21 0.733 ./libavutil/error.h:99:35: note: passing argument to parameter 'errbuf' here
+#21 0.733 int av_strerror(int errnum, char *errbuf, size_t errbuf_size);
+#21 0.733                                   ^
+#21 0.818 60 warnings generated.
+#21 0.846 src/fftools/opt_common.c:950:22: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.846     for (i = 0; name = av_get_known_color_name(i, &rgb); i++)
+#21 0.846                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.846 src/fftools/opt_common.c:950:22: note: place parentheses around the assignment to silence this warning
+#21 0.846     for (i = 0; name = av_get_known_color_name(i, &rgb); i++)
+#21 0.846                      ^
+#21 0.846                 (                                      )
+#21 0.846 src/fftools/opt_common.c:950:22: note: use '==' to turn this assignment into an equality comparison
+#21 0.846     for (i = 0; name = av_get_known_color_name(i, &rgb); i++)
+#21 0.846                      ^
+#21 0.846                      ==
+#21 0.846 src/fftools/opt_common.c:1012:22: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#21 0.846     while (ch_layout = av_channel_layout_standard(&iter)) {
+#21 0.846            ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#21 0.846 src/fftools/opt_common.c:1012:22: note: place parentheses around the assignment to silence this warning
+#21 0.846     while (ch_layout = av_channel_layout_standard(&iter)) {
+#21 0.846                      ^
+#21 0.846            (                                            )
+#21 0.846 src/fftools/opt_common.c:1012:22: note: use '==' to turn this assignment into an equality comparison
+#21 0.846     while (ch_layout = av_channel_layout_standard(&iter)) {
+#21 0.846                      ^
+#21 0.846                      ==
+#21 0.863 2 warnings generated.
+#21 0.875 cache:INFO: generating system asset: symbol_lists/c7acd7c529cfb824e1467632701d87af7abed402.json... (this will be cached in "/emsdk/upstream/emscripten/cache/symbol_lists/c7acd7c529cfb824e1467632701d87af7abed402.json" for subsequent builds)
+#21 0.982 cache:INFO:  - ok
+#21 DONE 1.2s
+
+#22 [ffmpeg-wasm-builder 5/5] RUN mkdir -p /src/dist/esm && bash -x /src/build.sh       -lmp3lame       -sEXPORT_ES6       -o dist/esm/ffmpeg-core.js
+#22 0.465 + set -euo pipefail
+#22 0.465 + EXPORT_NAME=createFFmpegCore
+#22 0.465 + CONF_FLAGS=(-I. -I./src/fftools -I$INSTALL_DIR/include -L$INSTALL_DIR/lib -Llibavcodec -Llibavfilter -Llibavformat -Llibavutil -Llibswresample -Llibswscale -lavcodec -lavfilter -lavformat -lavutil -lswresample -lswscale -Wno-deprecated-declarations $LDFLAGS -sENVIRONMENT=worker -sWASM_BIGINT -sINITIAL_MEMORY=16MB -sALLOW_MEMORY_GROWTH -sSTACK_SIZE=1MB -sMODULARIZE -sEXPORT_NAME="$EXPORT_NAME" -sEXPORTED_FUNCTIONS=$(node src/bind/ffmpeg/export-mp3.js) -sEXPORTED_RUNTIME_METHODS=$(node src/bind/ffmpeg/export-runtime.js) -lworkerfs.js --pre-js src/bind/ffmpeg/bind.js src/fftools/cmdutils.c src/fftools/ffmpeg.c src/fftools/ffmpeg_filter.c src/fftools/ffmpeg_hw.c src/fftools/ffmpeg_mux.c src/fftools/ffmpeg_opt.c src/fftools/opt_common.c)
+#22 0.465 ++ node src/bind/ffmpeg/export-mp3.js
+#22 0.483 ++ node src/bind/ffmpeg/export-runtime.js
+#22 0.501 + emcc -I. -I./src/fftools -I/opt/include -L/opt/lib -Llibavcodec -Llibavfilter -Llibavformat -Llibavutil -Llibswresample -Llibswscale -lavcodec -lavfilter -lavformat -lavutil -lswresample -lswscale -Wno-deprecated-declarations -L/opt/lib -sENVIRONMENT=worker -sWASM_BIGINT -sINITIAL_MEMORY=16MB -sALLOW_MEMORY_GROWTH -sSTACK_SIZE=1MB -sMODULARIZE -sEXPORT_NAME=createFFmpegCore -sEXPORTED_FUNCTIONS=_ffmpeg,_abort,_malloc -sEXPORTED_RUNTIME_METHODS=FS,setValue,getValue,UTF8ToString,lengthBytesUTF8,stringToUTF8 -lworkerfs.js --pre-js src/bind/ffmpeg/bind.js src/fftools/cmdutils.c src/fftools/ffmpeg.c src/fftools/ffmpeg_filter.c src/fftools/ffmpeg_hw.c src/fftools/ffmpeg_mux.c src/fftools/ffmpeg_opt.c src/fftools/opt_common.c -lmp3lame -sEXPORT_ES6 -o dist/esm/ffmpeg-core.js
+#22 0.581 src/fftools/cmdutils.c:189:18: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.581     while (child = av_opt_child_class_iterate(class, &iter))
+#22 0.581            ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.582 src/fftools/cmdutils.c:189:18: note: place parentheses around the assignment to silence this warning
+#22 0.582     while (child = av_opt_child_class_iterate(class, &iter))
+#22 0.582                  ^
+#22 0.582            (                                               )
+#22 0.582 src/fftools/cmdutils.c:189:18: note: use '==' to turn this assignment into an equality comparison
+#22 0.582     while (child = av_opt_child_class_iterate(class, &iter))
+#22 0.582                  ^
+#22 0.582                  ==
+#22 0.582 src/fftools/cmdutils.c:301:79: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#22 0.582         *(int64_t *)dst = parse_number_or_die(opt, arg, OPT_INT64, INT64_MIN, INT64_MAX);
+#22 0.582                           ~~~~~~~~~~~~~~~~~~~                                 ^~~~~~~~~
+#22 0.582 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#22 0.582 #define INT64_MAX  (0x7fffffffffffffff)
+#22 0.582                     ^~~~~~~~~~~~~~~~~~
+#22 0.583 src/fftools/cmdutils.c:456:12: warning: assigning to 'const unsigned char *' from 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.583     for (p = a; *p; p++)
+#22 0.583            ^ ~
+#22 0.583 src/fftools/cmdutils.c:465:12: warning: assigning to 'const unsigned char *' from 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.583     for (p = a; *p; p++) {
+#22 0.583            ^ ~
+#22 0.586 src/fftools/cmdutils.c:925:13: warning: 4 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_ATTACHMENT'... [-Wswitch]
+#22 0.586     switch (st->codecpar->codec_type) {
+#22 0.586             ^~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.586 src/fftools/cmdutils.c:940:14: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.586     while (t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX)) {
+#22 0.586            ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.587 src/fftools/cmdutils.c:940:14: note: place parentheses around the assignment to silence this warning
+#22 0.587     while (t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX)) {
+#22 0.587              ^
+#22 0.587            (                                                  )
+#22 0.587 src/fftools/cmdutils.c:940:14: note: use '==' to turn this assignment into an equality comparison
+#22 0.587     while (t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX)) {
+#22 0.587              ^
+#22 0.587              ==
+#22 0.599 6 warnings generated.
+#22 0.626 src/fftools/ffmpeg.c:272:18: warning: assigning to 'int8_t *' (aka 'signed char *') from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types with different sign [-Wpointer-sign]
+#22 0.626     dst          = frame->data    [0];
+#22 0.626                  ^ ~~~~~~~~~~~~~~~~~~
+#22 0.626 src/fftools/ffmpeg.c:275:29: warning: passing 'int8_t *' (aka 'signed char *') to parameter of type 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types with different sign [-Wpointer-sign]
+#22 0.626         sub2video_copy_rect(dst, dst_linesize, frame->width, frame->height, sub->rects[i]);
+#22 0.626                             ^~~
+#22 0.626 src/fftools/ffmpeg.c:192:42: note: passing argument to parameter 'dst' here
+#22 0.626 static void sub2video_copy_rect(uint8_t *dst, int dst_linesize, int w, int h,
+#22 0.626                                          ^
+#22 0.627 src/fftools/ffmpeg.c:345:41: warning: macro 'ATOMIC_VAR_INIT' has been marked as deprecated [-Wdeprecated-pragma]
+#22 0.627 static atomic_int transcode_init_done = ATOMIC_VAR_INIT(0);
+#22 0.627                                         ^
+#22 0.627 /emsdk/upstream/lib/clang/17/include/stdatomic.h:61:41: note: macro marked 'deprecated' here
+#22 0.627 #pragma clang deprecated(ATOMIC_VAR_INIT)
+#22 0.627                                         ^
+#22 0.632 src/fftools/ffmpeg.c:1724:35: warning: passing 'char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.632         avio_write(progress_avio, buf_script.str,
+#22 0.632                                   ^~~~~~~~~~~~~~
+#22 0.632 ./libavformat/avio.h:428:54: note: passing argument to parameter 'buf' here
+#22 0.632 void avio_write(AVIOContext *s, const unsigned char *buf, int size);
+#22 0.632                                                      ^
+#22 0.633 src/fftools/ffmpeg.c:1977:13: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#22 0.633     switch (ifilter->ist->st->codecpar->codec_type) {
+#22 0.633             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.633 src/fftools/ffmpeg.c:1995:12: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.633     if (sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DISPLAYMATRIX)) {
+#22 0.633         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.633 src/fftools/ffmpeg.c:1995:12: note: place parentheses around the assignment to silence this warning
+#22 0.633     if (sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DISPLAYMATRIX)) {
+#22 0.633            ^
+#22 0.633         (                                                              )
+#22 0.633 src/fftools/ffmpeg.c:1995:12: note: use '==' to turn this assignment into an equality comparison
+#22 0.633     if (sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DISPLAYMATRIX)) {
+#22 0.633            ^
+#22 0.633            ==
+#22 0.635 src/fftools/ffmpeg.c:2536:17: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#22 0.635         switch (ist->dec_ctx->codec_type) {
+#22 0.635                 ^~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.636 src/fftools/ffmpeg.c:2819:13: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#22 0.636     switch (par_dst->codec_type) {
+#22 0.636             ^~~~~~~~~~~~~~~~~~~
+#22 0.637 src/fftools/ffmpeg.c:2886:20: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.637         av_strlcpy(encoder_string, LIBAVCODEC_IDENT " ", encoder_string_len);
+#22 0.637                    ^~~~~~~~~~~~~~
+#22 0.637 ./libavutil/avstring.h:101:25: note: passing argument to parameter 'dst' here
+#22 0.637 size_t av_strlcpy(char *dst, const char *src, size_t size);
+#22 0.637                         ^
+#22 0.637 src/fftools/ffmpeg.c:2888:20: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.637         av_strlcpy(encoder_string, "Lavc ", encoder_string_len);
+#22 0.637                    ^~~~~~~~~~~~~~
+#22 0.637 ./libavutil/avstring.h:101:25: note: passing argument to parameter 'dst' here
+#22 0.637 size_t av_strlcpy(char *dst, const char *src, size_t size);
+#22 0.637                         ^
+#22 0.637 src/fftools/ffmpeg.c:2889:16: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.637     av_strlcat(encoder_string, ost->enc->name, encoder_string_len);
+#22 0.637                ^~~~~~~~~~~~~~
+#22 0.637 ./libavutil/avstring.h:119:25: note: passing argument to parameter 'dst' here
+#22 0.637 size_t av_strlcat(char *dst, const char *src, size_t size);
+#22 0.637                         ^
+#22 0.637 src/fftools/ffmpeg.c:2890:49: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.637     av_dict_set(&ost->st->metadata, "encoder",  encoder_string,
+#22 0.637                                                 ^~~~~~~~~~~~~~
+#22 0.637 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#22 0.637 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.637                                                                 ^
+#22 0.638 src/fftools/ffmpeg.c:3254:49: warning: passing 'uint32_t *' (aka 'unsigned int *') to parameter of type 'int32_t *' (aka 'int *') converts between pointers to integer types with different sign [-Wpointer-sign]
+#22 0.638                         av_display_rotation_set((uint32_t *)dst, 0);
+#22 0.638                                                 ^~~~~~~~~~~~~~~
+#22 0.638 ./libavutil/display.h:97:38: note: passing argument to parameter 'matrix' here
+#22 0.638 void av_display_rotation_set(int32_t matrix[9], double angle);
+#22 0.638                                      ^
+#22 0.643 src/fftools/ffmpeg.c:4586:25: warning: macro 'ATOMIC_VAR_INIT' has been marked as deprecated [-Wdeprecated-pragma]
+#22 0.643   transcode_init_done = ATOMIC_VAR_INIT(0);
+#22 0.643                         ^
+#22 0.643 /emsdk/upstream/lib/clang/17/include/stdatomic.h:61:41: note: macro marked 'deprecated' here
+#22 0.643 #pragma clang deprecated(ATOMIC_VAR_INIT)
+#22 0.643                                         ^
+#22 0.704 14 warnings generated.
+#22 0.730 src/fftools/ffmpeg_filter.c:305:21: warning: assigning to 'uint8_t *' (aka 'unsigned char *') from 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.730     ifilter->name   = describe_filter_link(fg, in, 1);
+#22 0.730                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.730 src/fftools/ffmpeg_filter.c:342:26: warning: assigning to 'uint8_t *' (aka 'unsigned char *') from 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.730         ofilter->name    = describe_filter_link(fg, cur, 0);
+#22 0.730                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.732 src/fftools/ffmpeg_filter.c:894:35: warning: floating-point comparison is always true; constant cannot be represented exactly in type 'float' [-Wliteral-range]
+#22 0.732         if (audio_drift_threshold != 0.1)
+#22 0.732             ~~~~~~~~~~~~~~~~~~~~~ ^  ~~~
+#22 0.748 3 warnings generated.
+#22 0.825 src/fftools/ffmpeg_opt.c:353:87: warning: implicit conversion from 'long long' to 'double' changes value from 9223372036854775807 to 9223372036854775808 [-Wimplicit-const-int-float-conversion]
+#22 0.825         { "abort_on"           , NULL, 0, AV_OPT_TYPE_FLAGS, { .i64 = 0 }, INT64_MIN, INT64_MAX,           .unit = "flags" },
+#22 0.825         ~                                                                             ^~~~~~~~~
+#22 0.825 /emsdk/upstream/emscripten/cache/sysroot/include/stdint.h:46:21: note: expanded from macro 'INT64_MAX'
+#22 0.825 #define INT64_MAX  (0x7fffffffffffffff)
+#22 0.825                     ^~~~~~~~~~~~~~~~~~
+#22 0.825 src/fftools/ffmpeg_opt.c:427:14: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.825     if (sync = strchr(map, ',')) {
+#22 0.825         ~~~~~^~~~~~~~~~~~~~~~~~
+#22 0.825 src/fftools/ffmpeg_opt.c:427:14: note: place parentheses around the assignment to silence this warning
+#22 0.825     if (sync = strchr(map, ',')) {
+#22 0.825              ^
+#22 0.825         (                      )
+#22 0.826 src/fftools/ffmpeg_opt.c:427:14: note: use '==' to turn this assignment into an equality comparison
+#22 0.826     if (sync = strchr(map, ',')) {
+#22 0.826              ^
+#22 0.826              ==
+#22 0.826 src/fftools/ffmpeg_opt.c:466:26: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.826         if (allow_unused = strchr(map, '?'))
+#22 0.826             ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+#22 0.826 src/fftools/ffmpeg_opt.c:466:26: note: place parentheses around the assignment to silence this warning
+#22 0.826         if (allow_unused = strchr(map, '?'))
+#22 0.826                          ^
+#22 0.826             (                              )
+#22 0.826 src/fftools/ffmpeg_opt.c:466:26: note: use '==' to turn this assignment into an equality comparison
+#22 0.826         if (allow_unused = strchr(map, '?'))
+#22 0.826                          ^
+#22 0.826                          ==
+#22 0.826 src/fftools/ffmpeg_opt.c:592:22: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.826     if (allow_unused = strchr(mapchan, '?'))
+#22 0.826         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+#22 0.826 src/fftools/ffmpeg_opt.c:592:22: note: place parentheses around the assignment to silence this warning
+#22 0.826     if (allow_unused = strchr(mapchan, '?'))
+#22 0.826                      ^
+#22 0.826         (                                  )
+#22 0.826 src/fftools/ffmpeg_opt.c:592:22: note: use '==' to turn this assignment into an equality comparison
+#22 0.826     if (allow_unused = strchr(mapchan, '?'))
+#22 0.826                      ^
+#22 0.826                      ==
+#22 0.827 src/fftools/ffmpeg_opt.c:851:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.827     MATCH_PER_STREAM_OPT(codec_names, str, codec_name, s, st);
+#22 0.827     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.827 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.827             outvar = o->name[i].u.type;\
+#22 0.827                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:898:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.828         MATCH_PER_STREAM_OPT(codec_tags, str, codec_tag, ic, st);
+#22 0.828         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.828             outvar = o->name[i].u.type;\
+#22 0.828                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:912:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.828         MATCH_PER_STREAM_OPT(discard, str, discard_str, ic, st);
+#22 0.828         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.828             outvar = o->name[i].u.type;\
+#22 0.828                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:961:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.828             MATCH_PER_STREAM_OPT(frame_rates, str, framerate, ic, st);
+#22 0.828             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.828             outvar = o->name[i].u.type;\
+#22 0.828                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:972:13: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.828             MATCH_PER_STREAM_OPT(hwaccels, str, hwaccel, ic, st);
+#22 0.828             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.828 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.828             outvar = o->name[i].u.type;\
+#22 0.828                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.829 src/fftools/ffmpeg_opt.c:973:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.829             MATCH_PER_STREAM_OPT(hwaccel_output_formats, str,
+#22 0.829             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.829 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.829             outvar = o->name[i].u.type;\
+#22 0.829                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.829 src/fftools/ffmpeg_opt.c:1029:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.829             MATCH_PER_STREAM_OPT(hwaccel_devices, str, hwaccel_device, ic, st);
+#22 0.829             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.829 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.829             outvar = o->name[i].u.type;\
+#22 0.829                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.829 src/fftools/ffmpeg_opt.c:1050:13: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.829             MATCH_PER_STREAM_OPT(canvas_sizes, str, canvas_size, ic, st);
+#22 0.829             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.829 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.829             outvar = o->name[i].u.type;\
+#22 0.829                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.830 src/fftools/ffmpeg_opt.c:1215:58: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.830             av_dict_set(&o->g->format_opts, "ch_layout", o->audio_ch_layouts[o->nb_audio_ch_layouts - 1].u.str, 0);
+#22 0.830                                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.830 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#22 0.830 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.830                                                                 ^
+#22 0.830 src/fftools/ffmpeg_opt.c:1226:25: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.830                         o->frame_rates[o->nb_frame_rates - 1].u.str, 0);
+#22 0.830                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.830 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#22 0.830 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.830                                                                 ^
+#22 0.830 src/fftools/ffmpeg_opt.c:1230:55: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.830         av_dict_set(&o->g->format_opts, "video_size", o->frame_sizes[o->nb_frame_sizes - 1].u.str, 0);
+#22 0.830                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.830 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#22 0.830 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.830                                                                 ^
+#22 0.831 src/fftools/ffmpeg_opt.c:1233:57: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.831         av_dict_set(&o->g->format_opts, "pixel_format", o->frame_pix_fmts[o->nb_frame_pix_fmts - 1].u.str, 0);
+#22 0.831                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.831 ./libavutil/dict.h:128:65: note: passing argument to parameter 'value' here
+#22 0.831 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.831                                                                 ^
+#22 0.831 src/fftools/ffmpeg_opt.c:1235:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.831     MATCH_PER_TYPE_OPT(codec_names, str,    video_codec_name, ic, "v");
+#22 0.831     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#22 0.831             outvar = o->name[i].u.type;\
+#22 0.831                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:1236:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.831     MATCH_PER_TYPE_OPT(codec_names, str,    audio_codec_name, ic, "a");
+#22 0.831     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#22 0.831             outvar = o->name[i].u.type;\
+#22 0.831                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:1237:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.831     MATCH_PER_TYPE_OPT(codec_names, str, subtitle_codec_name, ic, "s");
+#22 0.831     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#22 0.831             outvar = o->name[i].u.type;\
+#22 0.831                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:1238:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.831     MATCH_PER_TYPE_OPT(codec_names, str,     data_codec_name, ic, "d");
+#22 0.831     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.831 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#22 0.831             outvar = o->name[i].u.type;\
+#22 0.831                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.832 src/fftools/ffmpeg_opt.c:1433:37: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.832                 dump_attachment(st, o->dump_attachment[i].u.str);
+#22 0.832                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.832 src/fftools/ffmpeg_opt.c:1116:55: note: passing argument to parameter 'filename' here
+#22 0.832 static void dump_attachment(AVStream *st, const char *filename)
+#22 0.832                                                       ^
+#22 0.832 src/fftools/ffmpeg_opt.c:1492:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.832         MATCH_PER_STREAM_OPT(codec_names, str, codec_name, s, ost->st);
+#22 0.832         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.832 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.832             outvar = o->name[i].u.type;\
+#22 0.832                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.833 src/fftools/ffmpeg_opt.c:1581:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.833         MATCH_PER_STREAM_OPT(presets, str, preset, oc, st);
+#22 0.833         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.833 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.833             outvar = o->name[i].u.type;\
+#22 0.833                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.833 src/fftools/ffmpeg_opt.c:1616:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.833     MATCH_PER_STREAM_OPT(time_bases, str, time_base, oc, st);
+#22 0.833     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.833 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.833             outvar = o->name[i].u.type;\
+#22 0.833                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.833 src/fftools/ffmpeg_opt.c:1627:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.833     MATCH_PER_STREAM_OPT(enc_time_bases, str, time_base, oc, st);
+#22 0.833     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.833 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.833             outvar = o->name[i].u.type;\
+#22 0.833                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.834 src/fftools/ffmpeg_opt.c:1651:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.834     MATCH_PER_STREAM_OPT(bitstream_filters, str, bsfs, oc, st);
+#22 0.834     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.834 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.834             outvar = o->name[i].u.type;\
+#22 0.834                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.834 src/fftools/ffmpeg_opt.c:1660:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.834     MATCH_PER_STREAM_OPT(codec_tags, str, codec_tag, oc, st);
+#22 0.834     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.834 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.834             outvar = o->name[i].u.type;\
+#22 0.834                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.834 src/fftools/ffmpeg_opt.c:1675:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.834     MATCH_PER_STREAM_OPT(disposition, str, ost->disposition, oc, st);
+#22 0.834     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.834 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.834             outvar = o->name[i].u.type;\
+#22 0.834                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.835 src/fftools/ffmpeg_opt.c:1804:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.835     MATCH_PER_STREAM_OPT(frame_rates, str, frame_rate, oc, st);
+#22 0.835     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.835 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.835             outvar = o->name[i].u.type;\
+#22 0.835                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.835 src/fftools/ffmpeg_opt.c:1810:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.835     MATCH_PER_STREAM_OPT(max_frame_rates, str, max_frame_rate, oc, st);
+#22 0.835     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.835 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.835             outvar = o->name[i].u.type;\
+#22 0.835                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:1825:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.836     MATCH_PER_STREAM_OPT(frame_aspect_ratios, str, frame_aspect_ratio, oc, st);
+#22 0.836     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.836             outvar = o->name[i].u.type;\
+#22 0.836                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:1836:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.836     MATCH_PER_STREAM_OPT(filter_scripts, str, ost->filters_script, oc, st);
+#22 0.836     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.836             outvar = o->name[i].u.type;\
+#22 0.836                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:1837:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.836     MATCH_PER_STREAM_OPT(filters,        str, ost->filters,        oc, st);
+#22 0.836     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.836             outvar = o->name[i].u.type;\
+#22 0.836                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:1848:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.836         MATCH_PER_STREAM_OPT(frame_sizes, str, frame_size, oc, st);
+#22 0.836         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.836             outvar = o->name[i].u.type;\
+#22 0.836                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:1854:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.836         MATCH_PER_STREAM_OPT(frame_pix_fmts, str, frame_pix_fmt, oc, st);
+#22 0.836         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.836 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.836             outvar = o->name[i].u.type;\
+#22 0.836                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.837 src/fftools/ffmpeg_opt.c:1866:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.837         MATCH_PER_STREAM_OPT(intra_matrices, str, intra_matrix, oc, st);
+#22 0.837         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.837 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.837             outvar = o->name[i].u.type;\
+#22 0.837                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.837 src/fftools/ffmpeg_opt.c:1874:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.837         MATCH_PER_STREAM_OPT(chroma_intra_matrices, str, chroma_intra_matrix, oc, st);
+#22 0.837         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.837 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.837             outvar = o->name[i].u.type;\
+#22 0.837                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.837 src/fftools/ffmpeg_opt.c:1884:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.837         MATCH_PER_STREAM_OPT(inter_matrices, str, inter_matrix, oc, st);
+#22 0.837         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.837 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.837             outvar = o->name[i].u.type;\
+#22 0.837                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.838 src/fftools/ffmpeg_opt.c:1893:9: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.838         MATCH_PER_STREAM_OPT(rc_overrides, str, p, oc, st);
+#22 0.838         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.838 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.838             outvar = o->name[i].u.type;\
+#22 0.838                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.838 src/fftools/ffmpeg_opt.c:1939:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.838         MATCH_PER_STREAM_OPT(passlogfiles, str, ost->logfile_prefix, oc, st);
+#22 0.838         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.838 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.838             outvar = o->name[i].u.type;\
+#22 0.838                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.839 src/fftools/ffmpeg_opt.c:1978:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.839         MATCH_PER_STREAM_OPT(forced_key_frames, str, ost->forced_keyframes, oc, st);
+#22 0.839         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.839 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.839             outvar = o->name[i].u.type;\
+#22 0.839                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.839 src/fftools/ffmpeg_opt.c:1988:9: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.839         MATCH_PER_STREAM_OPT(fps_mode, str, ost->fps_mode, oc, st);
+#22 0.839         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.839 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.839             outvar = o->name[i].u.type;\
+#22 0.839                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:2044:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.840     MATCH_PER_STREAM_OPT(filter_scripts, str, ost->filters_script, oc, st);
+#22 0.840     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.840             outvar = o->name[i].u.type;\
+#22 0.840                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:2045:5: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.840     MATCH_PER_STREAM_OPT(filters,        str, ost->filters,        oc, st);
+#22 0.840     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.840             outvar = o->name[i].u.type;\
+#22 0.840                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:2058:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.840         MATCH_PER_STREAM_OPT(audio_ch_layouts, str, layout, oc, st);
+#22 0.840         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.840             outvar = o->name[i].u.type;\
+#22 0.840                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:2079:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.840         MATCH_PER_STREAM_OPT(sample_fmts, str, sample_fmt, oc, st);
+#22 0.840         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.840 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.840             outvar = o->name[i].u.type;\
+#22 0.840                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.841 src/fftools/ffmpeg_opt.c:2088:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.841         MATCH_PER_STREAM_OPT(apad, str, ost->apad, oc, st);
+#22 0.841         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.841 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.841             outvar = o->name[i].u.type;\
+#22 0.841                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.841 src/fftools/ffmpeg_opt.c:2180:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.841         MATCH_PER_STREAM_OPT(frame_sizes, str, frame_size, oc, st);
+#22 0.841         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.841 src/fftools/ffmpeg_opt.c:130:20: note: expanded from macro 'MATCH_PER_STREAM_OPT'
+#22 0.841             outvar = o->name[i].u.type;\
+#22 0.841                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.843 src/fftools/ffmpeg_opt.c:2476:21: warning: 4 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_ATTACHMENT'... [-Wswitch]
+#22 0.843             switch (ofilter->type) {
+#22 0.843                     ^~~~~~~~~~~~~
+#22 0.843 src/fftools/ffmpeg_opt.c:2560:9: warning: assigning to 'char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.843         MATCH_PER_TYPE_OPT(codec_names, str, subtitle_codec_name, oc, "s");
+#22 0.843         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.843 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#22 0.843             outvar = o->name[i].u.type;\
+#22 0.843                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.844 src/fftools/ffmpeg_opt.c:2791:21: warning: 5 enumeration values not handled in switch: 'AVMEDIA_TYPE_UNKNOWN', 'AVMEDIA_TYPE_DATA', 'AVMEDIA_TYPE_SUBTITLE'... [-Wswitch]
+#22 0.844             switch (ost->enc_ctx->codec_type) {
+#22 0.844                     ^~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.844 src/fftools/ffmpeg_opt.c:2859:36: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.844         int in_file_index = strtol(o->metadata_map[i].u.str, &p, 0);
+#22 0.844                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.844 /emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h:32:36: note: passing argument to parameter here
+#22 0.844 long strtol (const char *__restrict, char **__restrict, int);
+#22 0.844                                    ^
+#22 0.844 src/fftools/ffmpeg_opt.c:2915:21: warning: initializing 'const char *' with an expression of type 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.844         const char *p = o->program[i].u.str;
+#22 0.844                     ^   ~~~~~~~~~~~~~~~~~~~
+#22 0.844 src/fftools/ffmpeg_opt.c:2944:11: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.844         p = o->program[i].u.str;
+#22 0.844           ^ ~~~~~~~~~~~~~~~~~~~
+#22 0.844 src/fftools/ffmpeg_opt.c:2986:22: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.844         val = strchr(o->metadata[i].u.str, '=');
+#22 0.844                      ^~~~~~~~~~~~~~~~~~~~
+#22 0.844 /emsdk/upstream/emscripten/cache/sysroot/include/string.h:45:27: note: passing argument to parameter here
+#22 0.844 char *strchr (const char *, int);
+#22 0.844                           ^
+#22 0.844 src/fftools/ffmpeg_opt.c:2999:33: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.844                     if (!strcmp(o->metadata[i].u.str, "rotate")) {
+#22 0.844                                 ^~~~~~~~~~~~~~~~~~~~
+#22 0.844 /emsdk/upstream/emscripten/cache/sysroot/include/string.h:39:25: note: passing argument to parameter here
+#22 0.844 int strcmp (const char *, const char *);
+#22 0.844                         ^
+#22 0.845 src/fftools/ffmpeg_opt.c:3007:64: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.845                         av_dict_set(&oc->streams[j]->metadata, o->metadata[i].u.str, *val ? val : NULL, 0);
+#22 0.845                                                                ^~~~~~~~~~~~~~~~~~~~
+#22 0.845 ./libavutil/dict.h:128:48: note: passing argument to parameter 'key' here
+#22 0.845 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.845                                                ^
+#22 0.845 src/fftools/ffmpeg_opt.c:3036:28: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.845             av_dict_set(m, o->metadata[i].u.str, *val ? val : NULL, 0);
+#22 0.845                            ^~~~~~~~~~~~~~~~~~~~
+#22 0.845 ./libavutil/dict.h:128:48: note: passing argument to parameter 'key' here
+#22 0.845 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
+#22 0.845                                                ^
+#22 0.846 src/fftools/ffmpeg_opt.c:3262:5: warning: assigning to 'const char *' from 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.846     MATCH_PER_TYPE_OPT(codec_names, str, codec_name, NULL, tmp_line);
+#22 0.846     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.846 src/fftools/ffmpeg_opt.c:146:20: note: expanded from macro 'MATCH_PER_TYPE_OPT'
+#22 0.846             outvar = o->name[i].u.type;\
+#22 0.846                    ^ ~~~~~~~~~~~~~~~~~
+#22 0.847 src/fftools/ffmpeg_opt.c:3604:26: warning: passing 'uint8_t[128]' (aka 'unsigned char[128]') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+#22 0.847         av_strerror(ret, error, sizeof(error));
+#22 0.847                          ^~~~~
+#22 0.847 ./libavutil/error.h:99:35: note: passing argument to parameter 'errbuf' here
+#22 0.847 int av_strerror(int errnum, char *errbuf, size_t errbuf_size);
+#22 0.847                                   ^
+#22 0.932 60 warnings generated.
+#22 0.957 src/fftools/opt_common.c:950:22: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.957     for (i = 0; name = av_get_known_color_name(i, &rgb); i++)
+#22 0.957                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.957 src/fftools/opt_common.c:950:22: note: place parentheses around the assignment to silence this warning
+#22 0.957     for (i = 0; name = av_get_known_color_name(i, &rgb); i++)
+#22 0.957                      ^
+#22 0.957                 (                                      )
+#22 0.957 src/fftools/opt_common.c:950:22: note: use '==' to turn this assignment into an equality comparison
+#22 0.957     for (i = 0; name = av_get_known_color_name(i, &rgb); i++)
+#22 0.957                      ^
+#22 0.957                      ==
+#22 0.958 src/fftools/opt_common.c:1012:22: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+#22 0.958     while (ch_layout = av_channel_layout_standard(&iter)) {
+#22 0.958            ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#22 0.958 src/fftools/opt_common.c:1012:22: note: place parentheses around the assignment to silence this warning
+#22 0.958     while (ch_layout = av_channel_layout_standard(&iter)) {
+#22 0.958                      ^
+#22 0.958            (                                            )
+#22 0.958 src/fftools/opt_common.c:1012:22: note: use '==' to turn this assignment into an equality comparison
+#22 0.958     while (ch_layout = av_channel_layout_standard(&iter)) {
+#22 0.958                      ^
+#22 0.958                      ==
+#22 0.976 2 warnings generated.
+#22 0.987 cache:INFO: generating system asset: symbol_lists/c381f525acc97cff944ab7d373fbd457ca4f6641.json... (this will be cached in "/emsdk/upstream/emscripten/cache/symbol_lists/c381f525acc97cff944ab7d373fbd457ca4f6641.json" for subsequent builds)
+#22 1.098 cache:INFO:  - ok
+#22 DONE 1.3s
+
+#23 [exportor 1/1] COPY --from=ffmpeg-wasm-builder /src/dist /dist
+#23 DONE 0.0s
+
+#24 exporting to client directory
+#24 copying files 4.48MB 0.0s done
+#24 DONE 0.0s

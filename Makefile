@@ -48,3 +48,31 @@ prd:
 
 prd-mt:
 	make build-mt EXTRA_CFLAGS="$(PROD_MT_CFLAGS)"
+
+# Minimal MP3-only build targets
+.PHONY: build-mp3
+build-mp3:
+	rm -rf ./packages/core-mp3/dist
+	EXTRA_CFLAGS="$(EXTRA_CFLAGS)" \
+	EXTRA_LDFLAGS="$(EXTRA_LDFLAGS)" \
+	FFMPEG_ST="$(FFMPEG_ST)" \
+	FFMPEG_MT="$(FFMPEG_MT)" \
+		docker buildx build \
+			--build-arg EXTRA_CFLAGS \
+			--build-arg EXTRA_LDFLAGS \
+			--build-arg FFMPEG_MT \
+			--build-arg FFMPEG_ST \
+			-f Dockerfile.mp3 \
+			-o ./packages/core-mp3 \
+			$(EXTRA_ARGS) \
+			.
+
+build-mp3-st:
+	make build-mp3 \
+		FFMPEG_ST=yes
+
+dev-mp3:
+	make build-mp3-st EXTRA_CFLAGS="$(DEV_CFLAGS)" EXTRA_ARGS="$(DEV_ARGS)"
+
+prd-mp3:
+	make build-mp3-st EXTRA_CFLAGS="$(PROD_CFLAGS)"
