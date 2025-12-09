@@ -13,6 +13,13 @@ A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3**.
 npm install pcm-to-mp3-wasm
 ```
 
+## Build Formats
+
+| Build | Import Path | Use Case |
+|-------|-------------|----------|
+| **ESM** | `pcm-to-mp3-wasm` | Modern bundlers (Vite, Webpack 5, Next.js, Rollup), native ES modules |
+| **UMD** | `pcm-to-mp3-wasm/dist/umd` | Legacy bundlers, script tags, CommonJS environments |
+
 ## Quick Start
 
 ```typescript

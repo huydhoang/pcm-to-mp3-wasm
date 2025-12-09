@@ -1,6 +1,6 @@
 {
     "name": "pcm-to-mp3-wasm",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Minimal FFmpeg WASM for PCM to MP3 conversion (~2MB). Zero dependencies, Web Worker support, non-blocking.",
     "type": "module",
     "main": "./dist/esm/index.js",
@@ -36,7 +36,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ffmpegwasm/ffmpeg.wasm.git"
+        "url": "git+https://github.com/huydhoang/pcm-to-mp3-wasm.git"
     },
     "keywords": [
         "ffmpeg",
@@ -54,12 +54,12 @@
     "author": "",
     "license": "GPL-2.0-or-later",
     "bugs": {
-        "url": "https://github.com/ffmpegwasm/ffmpeg.wasm/issues"
+        "url": "https://github.com/huydhoang/pcm-to-mp3-wasm/issues"
     },
     "engines": {
         "node": ">=18.x"
     },
-    "homepage": "https://github.com/ffmpegwasm/ffmpeg.wasm#readme",
+    "homepage": "https://github.com/huydhoang/pcm-to-mp3-wasm#readme",
     "publishConfig": {
         "access": "public"
     },
