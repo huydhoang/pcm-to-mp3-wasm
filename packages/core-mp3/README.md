@@ -1,13 +1,16 @@
 # pcm-to-mp3-wasm
 
-A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3**. 
+A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3** in the browser.
 
 - ✅ **Tiny bundle**: ~2MB (vs ~30MB for full ffmpeg.wasm)
 - ✅ **Zero dependencies**: No `@ffmpeg/ffmpeg` required
-- ✅ **Non-blocking**: Runs in a Web Worker
+- ✅ **Non-blocking**: Runs internally in a Web Worker — never freezes the UI
 - ✅ **TypeScript**: Full type definitions included
 
-> **For server-side Node.js usage**, see the companion package: [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node)
+> [!IMPORTANT]
+> This package **automatically uses a Web Worker** internally for all conversions.
+> You call the API from your client component (`'use client'`), and the package handles worker creation.
+> For server-side Node.js usage, see [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node).
 
 ## Installation
 
@@ -80,7 +83,7 @@ converter.terminate();
 
 ## Framework Integration
 
-- [Next.js Integration Guide](./NEXTJS.md)
+- [Next.js Integration Guide](./NEXTJS.md) - Client-side Web Worker patterns
 
 ## API Reference
 
@@ -112,7 +115,9 @@ Reusable converter class.
 
 ## Single-Threaded Design
 
-This package uses a **single-threaded** FFmpeg WASM build by design.
+> [!NOTE]
+> **No `SharedArrayBuffer` or special headers (COOP/COEP) required!**
+> This package uses a single-threaded build for **maximum browser compatibility**.
 
 ### Why Single-Threaded?
 
@@ -120,16 +125,12 @@ This package uses a **single-threaded** FFmpeg WASM build by design.
 |--------|-----------------|----------------|
 | **Memory** | 16MB (growable) | 1024MB (fixed) |
 | **Bundle Size** | ~1.94 MB | ~2.5 MB (+25%) |
-| **Conversion Speed** | Baseline | ~1.5-2x faster |
-| **Browser Requirements** | None | SharedArrayBuffer + COOP/COEP headers |
+| **Conversion Speed** | ⚡ ~2-4s for 10 min | ~1-2s for 10 min |
+| **Browser Requirements** | ✅ None | ⚠️ SharedArrayBuffer + COOP/COEP |
 
-For typical audio conversions (up to 10 minutes at 44.1kHz), single-threaded conversion takes **2.5-4 seconds**, which is acceptable for most use cases while offering:
+For audio-only PCM→MP3 conversion, single-threaded performance is **blazing fast** — the slight speed difference vs multi-threaded doesn't justify the complexity of configuring cross-origin isolation headers.
 
-- Maximum browser compatibility (no special headers required)
-- Lower memory footprint
-- Smaller bundle size
-
-For detailed benchmarks and trade-off analysis, see the [Performance Analysis](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/docs/specs/pcm-to-mp3/performance_analysis.md).
+For detailed benchmarks, see the [Performance Analysis](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/docs/specs/pcm-to-mp3/performance_analysis.md).
 
 ## Server-Side Node.js Usage
 

@@ -1,10 +1,15 @@
-# Next.js 16+ Integration
+# Next.js 16+ Integration (Web Worker)
 
 Guide for using `pcm-to-mp3-wasm` with Next.js 16+ (Turbopack) and React 19+.
 
-> ⚠️ **Note**: Next.js 16 uses Turbopack by default and has renamed `middleware.ts` to `proxy.ts`.
+> [!IMPORTANT]
+> This package runs **internally in a Web Worker** to prevent blocking the UI during conversion.
+> You call the API from your client component, and the package handles worker creation automatically.
 
-> 💡 **Server-side Alternative**: For server-side conversion in API routes, use `pcm-to-mp3-wasm-node` which uses native Node.js filesystem access via `NODERAWFS`. See [Server-Side Conversion](#server-side-conversion) section below.
+> [!NOTE]
+> Next.js 16 uses Turbopack by default and has renamed `middleware.ts` to `proxy.ts`.
+
+> 💡 **Server-side Alternative**: For server-side conversion in API routes, use [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node). See [Server-Side Conversion](#server-side-conversion) section below.
 
 
 ## Recommended: Serve WASM from `public/`
@@ -81,85 +86,35 @@ async function convertPcm(pcmData: Uint8Array) {
 }
 ```
 
-## Required Headers (for SharedArrayBuffer)
+## No Special Headers Required ✅
 
-If you see "SharedArrayBuffer is not defined", add COOP/COEP headers.
+> [!NOTE]
+> **This package uses a single-threaded build** — no `SharedArrayBuffer` or special browser headers are needed!
 
-Create `proxy.ts` in your project root (renamed from `middleware.ts` in Next.js 16):
+Unlike multi-threaded FFmpeg WASM builds that require Cross-Origin Isolation (COOP/COEP headers), this package is **single-threaded by design**:
 
-```typescript
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+| Aspect | This Package | Multi-threaded FFmpeg |
+|--------|--------------|----------------------|
+| **SharedArrayBuffer** | ✅ Not needed | ❌ Required |
+| **COOP/COEP headers** | ✅ Not needed | ❌ Required |
+| **Browser compatibility** | ✅ All modern browsers | ⚠️ Limited |
+| **Conversion speed** | ⚡ ~2-4s for 10 min audio | ~1-2s for 10 min audio |
 
-export function proxy(request: NextRequest) {
-  const response = NextResponse.next();
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-  response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
-  return response;
-}
-```
+**Why single-threaded?**
 
-Or in `next.config.ts`:
+For audio-only PCM→MP3 conversion, single-threaded performance is **blazing fast** (2-4 seconds for 10 minutes of audio). The slight speed difference vs multi-threaded doesn't justify the complexity of configuring cross-origin isolation headers.
 
-```typescript
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
-        ],
-      },
-    ];
-  },
-};
-
-export default nextConfig;
-```
-
-## Migration from Next.js 15
-
-If upgrading from Next.js 15:
-- Rename `middleware.ts` → `proxy.ts`
-- Rename exported `middleware` function → `proxy`
-- Run: `npx @next/codemod@canary upgrade latest`
+See [Performance Analysis](../../docs/specs/pcm-to-mp3/performance_analysis.md) for detailed benchmarks.
 
 ## Server-Side Conversion
 
-For API routes or server-side processing, use the Node.js build:
+For server-side conversion in API routes, use the Node.js package instead:
 
 ```bash
 npm install pcm-to-mp3-wasm-node
 ```
 
-```typescript
-// app/api/convert/route.ts
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
-
-export async function POST(request: Request) {
-  const pcmData = new Uint8Array(await request.arrayBuffer());
-  
-  const mp3Data = await convertPcmToMp3(pcmData, {
-    sampleRate: 44100,
-    channels: 1,
-    bitrate: 128,
-  });
-  
-  return new Response(mp3Data, {
-    headers: { 'Content-Type': 'audio/mpeg' },
-  });
-}
-```
-
-> **Benefits of server-side conversion**:
-> - No COOP/COEP headers required
-> - No WASM loading in browser
-> - Direct filesystem access via `NODERAWFS`
-> - Better for large files or batch processing
+See: [pcm-to-mp3-wasm-node Next.js Guide](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/packages/core-mp3-node/NEXTJS.md)
 
 ## Troubleshooting
 
@@ -167,6 +122,4 @@ export async function POST(request: Request) {
 |-------|----------|
 | WASM not found | Verify files are in `public/` and paths are correct |
 | Worker fails to load | Use dynamic import or ensure module workers are supported |
-| SharedArrayBuffer error | Add COOP/COEP headers via `proxy.ts` or `next.config.ts` |
-| Large file performance | Consider server-side conversion with `pcm-to-mp3-wasm-node` |
-
+| Large file performance | Use server-side conversion with `pcm-to-mp3-wasm-node` |

@@ -1,35 +1,129 @@
----
-<p align="center">
-  <a href="#">
-    <img alt="ffmpeg.wasm" width="128px" height="128px" src="https://github.com/ffmpegwasm/ffmpeg.wasm/blob/main/apps/website/static/img/logo192.png"></img>
-  </a>
-</p>
+# pcm-to-mp3-wasm
 
-# ffmpeg.wasm
+A minimal FFmpeg WebAssembly build for **PCM to MP3 audio conversion**.
 
-ffmpeg.wasm is a pure Webassembly / Javascript port of FFmpeg. It enables video & audio record, convert and stream right inside browsers.
+> 🍴 **Fork of [@ffmpeg/ffmpeg](https://github.com/ffmpegwasm/ffmpeg.wasm)** — stripped down to the essentials for audio conversion, resulting in a **95% smaller** bundle size.
 
-[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
-[![Node Version](https://img.shields.io/node/v/@ffmpeg/ffmpeg.svg)](https://img.shields.io/node/v/@ffmpeg/ffmpeg.svg)
-[![Actions Status](https://github.com/ffmpegwasm/ffmpeg.wasm/workflows/CI/badge.svg)](https://github.com/ffmpegwasm/ffmpeg.wasm/actions)
-![npm (tag)](https://img.shields.io/npm/v/@ffmpeg/ffmpeg/latest)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/ffmpegwasm/ffmpeg.wasm/graphs/commit-activity)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Downloads Total](https://img.shields.io/npm/dt/@ffmpeg/ffmpeg.svg)](https://www.npmjs.com/package/@ffmpeg/ffmpeg)
-[![Downloads Month](https://img.shields.io/npm/dm/@ffmpeg/ffmpeg.svg)](https://www.npmjs.com/package/@ffmpeg/ffmpeg)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/1943b6d3-45ad-4b46-bfba-cb8d5716604c/deploy-status)](https://app.netlify.com/sites/ffmpegwasm/deploys)
+## Why This Fork?
 
-Join us on Discord!
+| Metric | Full FFmpeg WASM | This Build | Savings |
+|--------|------------------|------------|---------|
+| WASM Size | ~30 MB | **1.61 MB** | **95%** |
+| JS Size | ~500 KB | **200 KB** | **60%** |
 
-[![Discord](https://dcbadge.vercel.app/api/server/NjGMaqqfm5)](https://discord.gg/NjGMaqqfm5)
+This monorepo produces two minimal npm packages optimized for **PCM to MP3 conversion**:
+
+| Package | Environment | Use Case |
+|---------|-------------|----------|
+| [`pcm-to-mp3-wasm`](https://www.npmjs.com/package/pcm-to-mp3-wasm) | Browser (Web Worker) | Client-side conversion, React/Next.js |
+| [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node) | Node.js (MEMFS) | API routes, serverless, CLI |
+
+## Single-Threaded by Design ✅
+
+Both packages use a **single-threaded** FFmpeg WASM build for maximum compatibility:
+
+- ✅ No `SharedArrayBuffer` required
+- ✅ No special browser headers (COOP/COEP)
+- ✅ Works in all modern browsers
+- ⚡ Blazing fast for audio-only conversion (~0.1s for typical TTS audio)
+
+For detailed benchmarks and trade-offs, see the [Performance Analysis](./docs/specs/pcm-to-mp3/performance_analysis.md).
+
+## Quick Start
+
+### Browser (Web Worker)
+
+```bash
+npm install pcm-to-mp3-wasm
+```
+
+```typescript
+import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
+
+const mp3Data = await convertPcmToMp3(pcmData, {
+  sampleRate: 44100,
+  channels: 1,
+  bitrate: 128
+});
+```
+
+### Node.js (Server-Side)
+
+```bash
+npm install pcm-to-mp3-wasm-node
+```
+
+```typescript
+import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+
+const mp3Data = await convertPcmToMp3(pcmBuffer, {
+  sampleRate: 44100,
+  channels: 1,
+  bitrate: 128
+});
+```
+
+## What's Included
+
+Only the codecs needed for PCM to MP3 conversion:
+
+| Component | Details |
+|-----------|---------|
+| **Decoders** | `pcm_s16le`, `pcm_f32le`, `pcm_mulaw`, `pcm_alaw` |
+| **Encoder** | `libmp3lame` (MP3) |
+| **Filters** | `aformat`, `aresample`, `anull` |
+
+## What's Excluded
+
+- ❌ Video codecs (x264, x265, libvpx, AV1)
+- ❌ Other audio codecs (Opus, Vorbis, AAC, FLAC)
+- ❌ Image libraries (libwebp, zimg)
+- ❌ Network protocols
+- ❌ ffprobe functionality
 
 ## Documentation
 
-- [Introduction](https://ffmpegwasm.netlify.app/docs/overview)
-- [Getting
-    Started](https://ffmpegwasm.netlify.app/docs/getting-started/installation)
-- [API](https://ffmpegwasm.netlify.app/docs/api/ffmpeg/)
-- [FAQ](https://ffmpegwasm.netlify.app/docs/faq)
-- [Contribution](https://ffmpegwasm.netlify.app/docs/contribution/core)
+- [Build Quickstart](./docs/specs/pcm-to-mp3/quickstart.md) — Build commands, Docker setup
+- [Performance Analysis](./docs/specs/pcm-to-mp3/performance_analysis.md) — Benchmarks, ST vs MT trade-offs
+- [pcm-to-mp3-wasm README](./packages/core-mp3/README.md) — Browser package API
+- [pcm-to-mp3-wasm-node README](./packages/core-mp3-node/README.md) — Node.js package API
+- [Next.js Guide (Client)](./packages/core-mp3/NEXTJS.md) — Web Worker integration
+- [Next.js Guide (Server)](./packages/core-mp3-node/NEXTJS.md) — API route patterns
 
-Please sponsor ffmpeg.wasm to make it sustainable. :heart:
+## Building Locally
+
+Requires Docker Desktop with `buildx` support.
+
+```bash
+# Browser/Web Worker build
+make prd-mp3
+
+# Node.js build
+make prd-mp3-node
+
+# Build all
+make build-mp3-all
+```
+
+See [Build Quickstart](./docs/specs/pcm-to-mp3/quickstart.md) for detailed instructions.
+
+## Test App
+
+The `apps/cartesia-tts` directory contains a demo that:
+1. Fetches PCM audio from Cartesia TTS
+2. Converts to MP3 using `pcm-to-mp3-wasm-node`
+3. Streams the result for browser playback
+
+```bash
+cd apps/cartesia-tts
+npx tsx server.ts
+# Open http://localhost:3456
+```
+
+## License
+
+GPL-2.0-or-later (due to libmp3lame dependency)
+
+## Credits
+
+This project is a fork of [ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm) by Jerome Wu and contributors.

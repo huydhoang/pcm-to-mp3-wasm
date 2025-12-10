@@ -239,39 +239,51 @@ Get-ChildItem -Path "packages/core-mp3/dist" -Recurse -File | `
 
 ---
 
-## Test in Browser
+## Test App: `apps/cartesia-tts`
+
+The `apps/cartesia-tts` directory contains test applications demonstrating both browser and server-side PCM-to-MP3 conversion using Cartesia TTS as the audio source.
+
+| Test Mode | Package | Filesystem | Use Case |
+|-----------|---------|------------|----------|
+| **Web Worker** | `pcm-to-mp3-wasm` | MEMFS (virtual) | Browser, Next.js client-side |
+| **Node.js Server** | `pcm-to-mp3-wasm-node` | MEMFS (in-memory) | API routes, serverless |
+
+> [!NOTE]
+> Both tests use **MEMFS (in-memory filesystem)** with zero disk I/O.
+> This makes them ideal for serverless environments like Vercel.
+
+---
+
+## Test 1: Web Worker (Browser)
+
+Test the browser-compatible `pcm-to-mp3-wasm` package with a static HTML page.
 
 ```bash
 npx http-server -c-1 -p 3333 --cors
 ```
 
-Navigate to `http://localhost:3333/test-pcm-to-mp3/index.html` and test with `sample.pcm`.
+Navigate to `http://localhost:3333/apps/cartesia-tts/index.html` and test with `sample.pcm`.
 
 ---
 
-## Test Node.js Build
+## Test 2: Node.js Server (In-Memory)
 
-The worker build can be tested in Node.js with an HTTP server that demonstrates true in-memory PCM-to-MP3 conversion (no disk I/O).
-
-> [!NOTE]
-> The **worker build** (`core-mp3`) uses MEMFS (virtual filesystem) which works in Node.js.
-> The **node build** (`core-mp3-node`) uses NODERAWFS which requires disk I/O.
-> For serverless environments like Vercel, use the worker build for in-memory conversion.
+Test the `pcm-to-mp3-wasm-node` package with a Node.js HTTP server that demonstrates **true in-memory conversion** (no disk I/O).
 
 ### Prerequisites
 
-1. Set your Cartesia API key in `test-pcm-to-mp3/.env`:
+1. Set your Cartesia API key in `apps/cartesia-tts/.env`:
 
 ```
 CARTESIA_API_KEY=your_api_key_here
 ```
 
-2. Ensure the worker build exists in `packages/core-mp3/dist/esm/`
+2. Ensure the Node.js build exists in `packages/core-mp3-node/dist/esm/`
 
 ### Run the Test Server
 
 ```bash
-cd test-pcm-to-mp3
+cd apps/cartesia-tts
 npx tsx server.ts
 ```
 
@@ -280,40 +292,52 @@ Then open: **http://localhost:3456**
 ### What the Test Does
 
 The server:
-1. Serves an HTML page with a text input and audio player
-2. On button click, fetches PCM from Cartesia TTS via SSE
-3. Converts PCM to MP3 using FFmpeg WASM **entirely in memory**
-4. Streams the MP3 back to the browser for playback
-5. Displays conversion stats (PCM size, MP3 size, compression ratio)
+1. **Pre-loads** the FFmpeg WASM converter at startup (faster subsequent requests)
+2. Serves an HTML page with a text input and audio player
+3. On button click, fetches PCM from Cartesia TTS via SSE
+4. Converts PCM to MP3 using FFmpeg WASM **entirely in memory (MEMFS)**
+5. Streams the MP3 back to the browser for playback
+6. Displays conversion stats (PCM size, MP3 size, compression ratio)
 
 ### Expected Server Output
 
 ```
+⏳ Pre-loading FFmpeg WASM converter...
+✅ Converter loaded in 0.02s
+
 🚀 PCM-to-MP3 WASM Test Server (In-Memory)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📌 Open: http://localhost:3456
 💾 Mode: In-memory (MEMFS, no disk I/O)
+⚡ Converter: Pre-loaded (fast conversions!)
 
 Waiting for requests...
 
+
 🎙️  New request...
-📄 Text: "Hello! This is a test..."
-✅ PCM: 720.00 KB
-⚡ Conversion: 0.42s
-✅ MP3: 57.00 KB
-📉 Compression: 92.1%
+📄 Text: "Hello! This is a test of the minimal FFmpeg WASM build for PCM to MP3 conversion."
+✅ PCM: 840.00 KB (TTS: 5.07s)
+warning: unsupported syscall: __syscall_getrusage
+
+⚡ Conversion: 0.09s
+✅ MP3: 153.51 KB
+📉 Compression: 81.7%
 ```
 
-The test demonstrates:
+### Key Features Demonstrated
+
 - ✅ Real-time streaming from Cartesia TTS SSE endpoint
-- ✅ Loading FFmpeg WASM in Node.js
-- ✅ True in-memory PCM-to-MP3 conversion (no disk I/O)
+- ✅ Pre-loaded converter for optimal performance
+- ✅ **True in-memory conversion** (MEMFS, no disk I/O)
+- ✅ Suitable for serverless/edge environments
 - ✅ Serving MP3 audio for browser playback
 
 ---
 
 ## Related Documentation
 
-- [Performance Analysis](./performance_analysis.md) - File sizes, conversion times, ST vs MT trade-offs
-- [README](../../packages/core-mp3/README.md) - API usage and integration
-- [Next.js Guide](../../packages/core-mp3/NEXTJS.md) - Framework integration
+- [Performance Analysis](./performance_analysis.md) - Benchmarks, ST vs MT trade-offs
+- [pcm-to-mp3-wasm](../../packages/core-mp3/README.md) - Browser/Web Worker package
+- [pcm-to-mp3-wasm-node](../../packages/core-mp3-node/README.md) - Node.js package
+- [Next.js Guide (Client)](../../packages/core-mp3/NEXTJS.md) - Web Worker integration
+- [Next.js Guide (Server)](../../packages/core-mp3-node/NEXTJS.md) - API route patterns

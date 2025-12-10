@@ -70,6 +70,10 @@ converter.terminate();
 | `f64le` | 64-bit float little-endian |
 | `u8` | Unsigned 8-bit |
 
+## Framework Integration
+
+- [Next.js Integration Guide](./NEXTJS.md) - Server-side API route patterns
+
 ## API Reference
 
 ### `convertPcmToMp3(pcmData, options?)`

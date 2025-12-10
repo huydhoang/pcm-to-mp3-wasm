@@ -1,0 +1,16 @@
+{
+    "name": "cartesia-tts",
+    "version": "1.0.0",
+    "description": "Cartesia TTS test app for pcm-to-mp3-wasm",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx server.ts"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5"
+    },
+    "devDependencies": {
+        "tsx": "^4.7.1",
+        "@types/node": "^20.11.24"
+    }
+}

@@ -91,7 +91,15 @@ Based on [ffmpeg.wasm benchmarks](https://ffmpegwasm.netlify.app/), multi-thread
 | **Browser Requirements** | None | SharedArrayBuffer + COOP/COEP |
 | **Server Compatibility** | All Node.js | All Node.js |
 
-### Browser Headers Required for MT
+> [!IMPORTANT]
+> **This repository builds single-threaded (ST) by default** for maximum compatibility.
+> 
+> No `SharedArrayBuffer` or special browser headers (COOP/COEP) are needed!
+> For audio-only PCM→MP3 conversion, single-threaded performance is **blazing fast**
+> (~2-4 seconds for 10 minutes of audio) — the slight speed difference vs multi-threaded
+> doesn't justify the complexity of configuring cross-origin isolation headers.
+
+### Browser Headers (Multi-Threaded Only)
 
 Multi-threaded builds require Cross-Origin Isolation headers:
 
