@@ -19,7 +19,7 @@ Successfully created a minimal ffmpeg.wasm build optimized for **PCM to MP3 conv
 
 | File | Purpose |
 |------|---------|
-| [Dockerfile.mp3](file:///c:/Users/Huy/Downloads/code/ffmpeg.wasm/Dockerfile.mp3) | Minimal Docker build with only lame library |
+| [Dockerfile.prod](file:///c:/Users/Huy/Downloads/code/ffmpeg.wasm/Dockerfile.prod) | Minimal Docker build with only lame library |
 | [build/ffmpeg-mp3.sh](file:///c:/Users/Huy/Downloads/code/ffmpeg.wasm/build/ffmpeg-mp3.sh) | FFmpeg configure with minimal codecs |
 | [build/ffmpeg-wasm-mp3.sh](file:///c:/Users/Huy/Downloads/code/ffmpeg.wasm/build/ffmpeg-wasm-mp3.sh) | WASM linker with required libraries |
 | [export-mp3.js](file:///c:/Users/Huy/Downloads/code/ffmpeg.wasm/src/bind/ffmpeg/export-mp3.js) | Minimal exports (no ffprobe) |
@@ -92,7 +92,7 @@ packages/core-mp3/
 docker buildx build `
   --build-arg EXTRA_CFLAGS="--profiling" `
   --build-arg FFMPEG_ST=yes `
-  -f Dockerfile.mp3 `
+  -f Dockerfile.prod `
   -o ./packages/core-mp3 `
   --progress=plain .
 ```
@@ -105,7 +105,7 @@ To get an even smaller build with full optimizations:
 docker buildx build `
   --build-arg EXTRA_CFLAGS="-O3 -msimd128" `
   --build-arg FFMPEG_ST=yes `
-  -f Dockerfile.mp3 `
+  -f Dockerfile.prod `
   -o ./packages/core-mp3 .
 ```
 

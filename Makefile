@@ -62,7 +62,7 @@ build-mp3:
 			--build-arg EXTRA_LDFLAGS \
 			--build-arg FFMPEG_MT \
 			--build-arg FFMPEG_ST \
-			-f Dockerfile.mp3 \
+			-f Dockerfile.prod \
 			-o ./packages/core-mp3 \
 			$(EXTRA_ARGS) \
 			.
