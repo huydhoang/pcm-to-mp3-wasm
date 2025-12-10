@@ -76,3 +76,38 @@ dev-mp3:
 
 prd-mp3:
 	make build-mp3-st EXTRA_CFLAGS="$(PROD_CFLAGS)"
+
+# ============================================================
+# Node.js Server Build Targets (with NODERAWFS for native FS)
+# ============================================================
+.PHONY: build-mp3-node
+build-mp3-node:
+	rm -rf ./packages/core-mp3-node/dist
+	EXTRA_CFLAGS="$(EXTRA_CFLAGS)" \
+	EXTRA_LDFLAGS="$(EXTRA_LDFLAGS)" \
+	FFMPEG_ST="$(FFMPEG_ST)" \
+	FFMPEG_MT="$(FFMPEG_MT)" \
+		docker buildx build \
+			--build-arg EXTRA_CFLAGS \
+			--build-arg EXTRA_LDFLAGS \
+			--build-arg FFMPEG_MT \
+			--build-arg FFMPEG_ST \
+			--build-arg FFMPEG_BUILD_SCRIPT=ffmpeg-wasm-mp3-node.sh \
+			-f Dockerfile.prod \
+			-o ./packages/core-mp3-node \
+			$(EXTRA_ARGS) \
+			.
+
+build-mp3-node-st:
+	make build-mp3-node \
+		FFMPEG_ST=yes
+
+dev-mp3-node:
+	make build-mp3-node-st EXTRA_CFLAGS="$(DEV_CFLAGS)" EXTRA_ARGS="$(DEV_ARGS)"
+
+prd-mp3-node:
+	make build-mp3-node-st EXTRA_CFLAGS="$(PROD_CFLAGS)"
+
+# Build both worker and node variants
+.PHONY: build-mp3-all
+build-mp3-all: prd-mp3 prd-mp3-node

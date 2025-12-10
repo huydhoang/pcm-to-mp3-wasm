@@ -1,5 +1,6 @@
 #!/bin/bash
-# Minimal ffmpeg.wasm link script for PCM to MP3 only
+# Node.js server build script for PCM to MP3 conversion
+# Uses NODERAWFS for native filesystem access (no virtual FS overhead)
 # `-o <OUTPUT_FILE_NAME>` must be provided when using this build script.
 
 set -euo pipefail
@@ -25,17 +26,17 @@ CONF_FLAGS=(
   -lswscale
   -Wno-deprecated-declarations 
   $LDFLAGS 
-  ${FFMPEG_ENV:-"-sENVIRONMENT=worker"}    # configurable: worker (default), node, or web,worker
+  -sENVIRONMENT=node                       # Node.js environment
+  -sNODERAWFS                              # Use native Node.js filesystem
   -sWASM_BIGINT                            # enable big int support
-  ${FFMPEG_MEMORY:-"-sINITIAL_MEMORY=16MB"} # configurable initial memory
+  -sINITIAL_MEMORY=32MB                    # larger memory for server workloads
   -sALLOW_MEMORY_GROWTH                    # allow memory to grow if needed
-  -sSTACK_SIZE=1MB                         # reduced stack size
+  -sSTACK_SIZE=1MB                         # standard stack size
   -sMODULARIZE                             # modularized to use as a library
-  -sEXPORT_NAME="$EXPORT_NAME"             # required in browser env
-  -sEXPORTED_FUNCTIONS=$(node src/bind/ffmpeg/export-mp3.js) # exported functions
+  -sEXPORT_NAME="$EXPORT_NAME"             # consistent export name
+  -sEXPORTED_FUNCTIONS=$(node src/bind/ffmpeg/export-mp3.js)
   -sEXPORTED_RUNTIME_METHODS=$(node src/bind/ffmpeg/export-runtime.js)
-  -lworkerfs.js
-  --pre-js src/bind/ffmpeg/bind.js        # extra bindings
+  --pre-js src/bind/ffmpeg/bind.js         # extra bindings
   # ffmpeg source code (excluding ffprobe for size reduction)
   src/fftools/cmdutils.c 
   src/fftools/ffmpeg.c 

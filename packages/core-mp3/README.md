@@ -7,8 +7,6 @@ A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3**.
 - ✅ **Non-blocking**: Runs in a Web Worker
 - ✅ **TypeScript**: Full type definitions included
 
-> **Note:** This build is compiled for **Web Worker environments only**. It runs audio conversion in a background thread to keep the browser UI responsive. Main thread (blocking) execution and Node.js server-side usage are not supported.
-
 ## Installation
 
 ```bash
@@ -17,10 +15,14 @@ npm install pcm-to-mp3-wasm
 
 ## Build Formats
 
-| Build | Import Path | Use Case |
-|-------|-------------|----------|
-| **ESM** | `pcm-to-mp3-wasm` | Modern bundlers (Vite, Webpack 5, Next.js, Rollup), native ES modules |
-| **UMD** | `pcm-to-mp3-wasm/dist/umd` | Legacy bundlers, script tags, CommonJS environments |
+| Build | Package/Path | Use Case |
+|-------|--------------|----------|
+| **Worker (ESM)** | `pcm-to-mp3-wasm` | Modern bundlers (Vite, Webpack 5, Next.js, Rollup), native ES modules |
+| **Worker (UMD)** | `pcm-to-mp3-wasm/dist/umd` | Legacy bundlers, script tags, CommonJS environments |
+| **Node.js** | `pcm-to-mp3-wasm-node` | Server-side Node.js with native filesystem access |
+
+> **Note**: The Node.js build uses `NODERAWFS` for direct filesystem access, avoiding the Emscripten virtual FS overhead.
+
 
 ## Quick Start
 
@@ -112,9 +114,19 @@ Reusable converter class.
 
 ## Development
 
+Build commands for both worker and Node.js environments:
+
 ```bash
-cd packages/core-mp3
-npx tsc
+# Worker build (browser/web worker environment)
+make dev-mp3           # Development build
+make prd-mp3           # Production build (optimized)
+
+# Node.js build (server-side with native FS)
+make dev-mp3-node      # Development build
+make prd-mp3-node      # Production build (optimized)
+
+# Build both variants
+make build-mp3-all     # Production builds for both environments
 ```
 
 ## License

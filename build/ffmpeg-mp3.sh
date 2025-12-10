@@ -34,14 +34,12 @@ CONF_FLAGS=(
   --disable-devices
   --disable-filters
 
-  # Enable only PCM decoders (for raw audio input)
-  --enable-decoder=pcm_s16le
-  --enable-decoder=pcm_s16be
-  --enable-decoder=pcm_s24le
-  --enable-decoder=pcm_s32le
-  --enable-decoder=pcm_f32le
-  --enable-decoder=pcm_f64le
-  --enable-decoder=pcm_u8
+  # Enable only PCM decoders matching Cartesia SSE output formats
+  # See: https://docs.cartesia.ai/api-reference/tts/sse
+  --enable-decoder=pcm_s16le    # 16-bit signed little-endian
+  --enable-decoder=pcm_f32le    # 32-bit float little-endian (default)
+  --enable-decoder=pcm_mulaw    # μ-law (telephony)
+  --enable-decoder=pcm_alaw     # A-law (telephony)
 
   # Enable MP3 encoder (via libmp3lame)
   --enable-encoder=libmp3lame
@@ -49,21 +47,15 @@ CONF_FLAGS=(
   # Enable muxers
   --enable-muxer=mp3
 
-  # Enable demuxers for raw audio
+  # Enable demuxers for raw audio (matching Cartesia formats)
   --enable-demuxer=pcm_s16le
-  --enable-demuxer=pcm_s16be
-  --enable-demuxer=pcm_s24le
-  --enable-demuxer=pcm_s32le
   --enable-demuxer=pcm_f32le
-  --enable-demuxer=pcm_f64le
-  --enable-demuxer=pcm_u8
+  --enable-demuxer=pcm_mulaw
+  --enable-demuxer=pcm_alaw
   --enable-demuxer=s16le
-  --enable-demuxer=s16be
-  --enable-demuxer=s24le
-  --enable-demuxer=s32le
   --enable-demuxer=f32le
-  --enable-demuxer=f64le
-  --enable-demuxer=u8
+  --enable-demuxer=mulaw
+  --enable-demuxer=alaw
 
   # Enable essential filters for audio processing
   --enable-filter=aformat

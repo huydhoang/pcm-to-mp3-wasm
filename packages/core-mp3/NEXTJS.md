@@ -4,6 +4,9 @@ Guide for using `pcm-to-mp3-wasm` with Next.js 16+ (Turbopack) and React 19+.
 
 > ⚠️ **Note**: Next.js 16 uses Turbopack by default and has renamed `middleware.ts` to `proxy.ts`.
 
+> 💡 **Server-side Alternative**: For server-side conversion in API routes, use `pcm-to-mp3-wasm-node` which uses native Node.js filesystem access via `NODERAWFS`. See [Server-Side Conversion](#server-side-conversion) section below.
+
+
 ## Recommended: Serve WASM from `public/`
 
 ### 1. Copy WASM Files
@@ -125,6 +128,39 @@ If upgrading from Next.js 15:
 - Rename exported `middleware` function → `proxy`
 - Run: `npx @next/codemod@canary upgrade latest`
 
+## Server-Side Conversion
+
+For API routes or server-side processing, use the Node.js build:
+
+```bash
+npm install pcm-to-mp3-wasm-node
+```
+
+```typescript
+// app/api/convert/route.ts
+import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+
+export async function POST(request: Request) {
+  const pcmData = new Uint8Array(await request.arrayBuffer());
+  
+  const mp3Data = await convertPcmToMp3(pcmData, {
+    sampleRate: 44100,
+    channels: 1,
+    bitrate: 128,
+  });
+  
+  return new Response(mp3Data, {
+    headers: { 'Content-Type': 'audio/mpeg' },
+  });
+}
+```
+
+> **Benefits of server-side conversion**:
+> - No COOP/COEP headers required
+> - No WASM loading in browser
+> - Direct filesystem access via `NODERAWFS`
+> - Better for large files or batch processing
+
 ## Troubleshooting
 
 | Issue | Solution |
@@ -132,3 +168,5 @@ If upgrading from Next.js 15:
 | WASM not found | Verify files are in `public/` and paths are correct |
 | Worker fails to load | Use dynamic import or ensure module workers are supported |
 | SharedArrayBuffer error | Add COOP/COEP headers via `proxy.ts` or `next.config.ts` |
+| Large file performance | Consider server-side conversion with `pcm-to-mp3-wasm-node` |
+
