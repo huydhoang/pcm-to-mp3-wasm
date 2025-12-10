@@ -412,6 +412,7 @@ legacyModuleProp('setWindowTitle', 'setWindowTitle');
 var IDBFS = 'IDBFS is no longer included by default; build with -lidbfs.js';
 var PROXYFS = 'PROXYFS is no longer included by default; build with -lproxyfs.js';
 var WORKERFS = 'WORKERFS is no longer included by default; build with -lworkerfs.js';
+var NODEFS = 'NODEFS is no longer included by default; build with -lnodefs.js';
 
 assert(!ENVIRONMENT_IS_WEB, "web environment detected but not enabled at build time.  Add 'web' to `-sENVIRONMENT` to enable.");
 
@@ -1240,9 +1241,70 @@ function is_timeout(diff) { if (Module.timeout === -1) return 0; else { return M
       abort(`Assertion failed: ${UTF8ToString(condition)}, at: ` + [filename ? UTF8ToString(filename) : 'unknown filename', line, func ? UTF8ToString(func) : 'unknown function']);
     }
 
-  var PATH = {isAbs:(path) => nodePath['isAbsolute'](path),normalize:(path) => nodePath['normalize'](path),dirname:(path) => nodePath['dirname'](path),basename:(path) => nodePath['basename'](path),join:function () {
-        return nodePath['join'].apply(null, arguments);
-      },join2:(l, r) => nodePath['join'](l, r)};
+  var PATH = {isAbs:(path) => path.charAt(0) === '/',splitPath:(filename) => {
+        var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+        return splitPathRe.exec(filename).slice(1);
+      },normalizeArray:(parts, allowAboveRoot) => {
+        // if the path tries to go above the root, `up` ends up > 0
+        var up = 0;
+        for (var i = parts.length - 1; i >= 0; i--) {
+          var last = parts[i];
+          if (last === '.') {
+            parts.splice(i, 1);
+          } else if (last === '..') {
+            parts.splice(i, 1);
+            up++;
+          } else if (up) {
+            parts.splice(i, 1);
+            up--;
+          }
+        }
+        // if the path is allowed to go above the root, restore leading ..s
+        if (allowAboveRoot) {
+          for (; up; up--) {
+            parts.unshift('..');
+          }
+        }
+        return parts;
+      },normalize:(path) => {
+        var isAbsolute = PATH.isAbs(path),
+            trailingSlash = path.substr(-1) === '/';
+        // Normalize the path
+        path = PATH.normalizeArray(path.split('/').filter((p) => !!p), !isAbsolute).join('/');
+        if (!path && !isAbsolute) {
+          path = '.';
+        }
+        if (path && trailingSlash) {
+          path += '/';
+        }
+        return (isAbsolute ? '/' : '') + path;
+      },dirname:(path) => {
+        var result = PATH.splitPath(path),
+            root = result[0],
+            dir = result[1];
+        if (!root && !dir) {
+          // No dirname whatsoever
+          return '.';
+        }
+        if (dir) {
+          // It has a dirname, strip trailing slash
+          dir = dir.substr(0, dir.length - 1);
+        }
+        return root + dir;
+      },basename:(path) => {
+        // EMSCRIPTEN return '/'' for '/', not an empty string
+        if (path === '/') return '/';
+        path = PATH.normalize(path);
+        path = path.replace(/\/$/, "");
+        var lastSlash = path.lastIndexOf('/');
+        if (lastSlash === -1) return path;
+        return path.substr(lastSlash+1);
+      },join:function() {
+        var paths = Array.prototype.slice.call(arguments);
+        return PATH.normalize(paths.join('/'));
+      },join2:(l, r) => {
+        return PATH.normalize(l + '/' + r);
+      }};
   
   function initRandomFill() {
       if (typeof crypto == 'object' && typeof crypto['getRandomValues'] == 'function') {
@@ -1278,12 +1340,57 @@ function is_timeout(diff) { if (Module.timeout === -1) return 0; else { return M
     }
   
   
-  /** @type{{resolve: function(...*)}} */
-  var PATH_FS = {resolve:function () {
-        var paths = Array.prototype.slice.call(arguments, 0);
-        paths.unshift(FS.cwd());
-        return nodePath['posix']['resolve'].apply(null, paths);
-      },relative:(from, to) => nodePath['posix']['relative'](from || FS.cwd(), to || FS.cwd())};
+  
+  var PATH_FS = {resolve:function() {
+        var resolvedPath = '',
+          resolvedAbsolute = false;
+        for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+          var path = (i >= 0) ? arguments[i] : FS.cwd();
+          // Skip empty and invalid entries
+          if (typeof path != 'string') {
+            throw new TypeError('Arguments to path.resolve must be strings');
+          } else if (!path) {
+            return ''; // an invalid portion invalidates the whole thing
+          }
+          resolvedPath = path + '/' + resolvedPath;
+          resolvedAbsolute = PATH.isAbs(path);
+        }
+        // At this point the path should be resolved to a full absolute path, but
+        // handle relative paths to be safe (might happen when process.cwd() fails)
+        resolvedPath = PATH.normalizeArray(resolvedPath.split('/').filter((p) => !!p), !resolvedAbsolute).join('/');
+        return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+      },relative:(from, to) => {
+        from = PATH_FS.resolve(from).substr(1);
+        to = PATH_FS.resolve(to).substr(1);
+        function trim(arr) {
+          var start = 0;
+          for (; start < arr.length; start++) {
+            if (arr[start] !== '') break;
+          }
+          var end = arr.length - 1;
+          for (; end >= 0; end--) {
+            if (arr[end] !== '') break;
+          }
+          if (start > end) return [];
+          return arr.slice(start, end - start + 1);
+        }
+        var fromParts = trim(from.split('/'));
+        var toParts = trim(to.split('/'));
+        var length = Math.min(fromParts.length, toParts.length);
+        var samePartsLength = length;
+        for (var i = 0; i < length; i++) {
+          if (fromParts[i] !== toParts[i]) {
+            samePartsLength = i;
+            break;
+          }
+        }
+        var outputParts = [];
+        for (var i = samePartsLength; i < fromParts.length; i++) {
+          outputParts.push('..');
+        }
+        outputParts = outputParts.concat(toParts.slice(samePartsLength));
+        return outputParts.join('/');
+      }};
   
   
   function lengthBytesUTF8(str) {
@@ -1914,419 +2021,9 @@ function is_timeout(diff) { if (Module.timeout === -1) return 0; else { return M
   
   
   
-  
-  
-  var ERRNO_CODES = {};
-  
-  var NODEFS = {isWindows:false,staticInit:() => {
-        NODEFS.isWindows = !!process.platform.match(/^win/);
-        var flags = process.binding("constants");
-        // Node.js 4 compatibility: it has no namespaces for constants
-        if (flags["fs"]) {
-          flags = flags["fs"];
-        }
-        NODEFS.flagsForNodeMap = {
-          "1024": flags["O_APPEND"],
-          "64": flags["O_CREAT"],
-          "128": flags["O_EXCL"],
-          "256": flags["O_NOCTTY"],
-          "0": flags["O_RDONLY"],
-          "2": flags["O_RDWR"],
-          "4096": flags["O_SYNC"],
-          "512": flags["O_TRUNC"],
-          "1": flags["O_WRONLY"],
-          "131072": flags["O_NOFOLLOW"],
-        };
-        // The 0 define must match on both sides, as otherwise we would not
-        // know to add it.
-        assert(NODEFS.flagsForNodeMap["0"] === 0);
-      },convertNodeCode:(e) => {
-        var code = e.code;
-        assert(code in ERRNO_CODES, `unexpected node error code: ${code} (${e})`);
-        return ERRNO_CODES[code];
-      },mount:(mount) => {
-        assert(ENVIRONMENT_IS_NODE);
-        return NODEFS.createNode(null, '/', NODEFS.getMode(mount.opts.root), 0);
-      },createNode:(parent, name, mode, dev) => {
-        if (!FS.isDir(mode) && !FS.isFile(mode) && !FS.isLink(mode)) {
-          throw new FS.ErrnoError(28);
-        }
-        var node = FS.createNode(parent, name, mode);
-        node.node_ops = NODEFS.node_ops;
-        node.stream_ops = NODEFS.stream_ops;
-        return node;
-      },getMode:(path) => {
-        var stat;
-        try {
-          stat = fs.lstatSync(path);
-          if (NODEFS.isWindows) {
-            // Node.js on Windows never represents permission bit 'x', so
-            // propagate read bits to execute bits
-            stat.mode = stat.mode | ((stat.mode & 292) >> 2);
-          }
-        } catch (e) {
-          if (!e.code) throw e;
-          throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-        }
-        return stat.mode;
-      },realPath:(node) => {
-        var parts = [];
-        while (node.parent !== node) {
-          parts.push(node.name);
-          node = node.parent;
-        }
-        parts.push(node.mount.opts.root);
-        parts.reverse();
-        return PATH.join.apply(null, parts);
-      },flagsForNode:(flags) => {
-        flags &= ~2097152; // Ignore this flag from musl, otherwise node.js fails to open the file.
-        flags &= ~2048; // Ignore this flag from musl, otherwise node.js fails to open the file.
-        flags &= ~32768; // Ignore this flag from musl, otherwise node.js fails to open the file.
-        flags &= ~524288; // Some applications may pass it; it makes no sense for a single process.
-        flags &= ~65536; // Node.js doesn't need this passed in, it errors.
-        var newFlags = 0;
-        for (var k in NODEFS.flagsForNodeMap) {
-          if (flags & k) {
-            newFlags |= NODEFS.flagsForNodeMap[k];
-            flags ^= k;
-          }
-        }
-        if (flags) {
-          throw new FS.ErrnoError(28);
-        }
-        return newFlags;
-      },node_ops:{getattr:(node) => {
-          var path = NODEFS.realPath(node);
-          var stat;
-          try {
-            stat = fs.lstatSync(path);
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-          // node.js v0.10.20 doesn't report blksize and blocks on Windows. Fake them with default blksize of 4096.
-          // See http://support.microsoft.com/kb/140365
-          if (NODEFS.isWindows && !stat.blksize) {
-            stat.blksize = 4096;
-          }
-          if (NODEFS.isWindows && !stat.blocks) {
-            stat.blocks = (stat.size+stat.blksize-1)/stat.blksize|0;
-          }
-          return {
-            dev: stat.dev,
-            ino: stat.ino,
-            mode: stat.mode,
-            nlink: stat.nlink,
-            uid: stat.uid,
-            gid: stat.gid,
-            rdev: stat.rdev,
-            size: stat.size,
-            atime: stat.atime,
-            mtime: stat.mtime,
-            ctime: stat.ctime,
-            blksize: stat.blksize,
-            blocks: stat.blocks
-          };
-        },setattr:(node, attr) => {
-          var path = NODEFS.realPath(node);
-          try {
-            if (attr.mode !== undefined) {
-              fs.chmodSync(path, attr.mode);
-              // update the common node structure mode as well
-              node.mode = attr.mode;
-            }
-            if (attr.timestamp !== undefined) {
-              var date = new Date(attr.timestamp);
-              fs.utimesSync(path, date, date);
-            }
-            if (attr.size !== undefined) {
-              fs.truncateSync(path, attr.size);
-            }
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },lookup:(parent, name) => {
-          var path = PATH.join2(NODEFS.realPath(parent), name);
-          var mode = NODEFS.getMode(path);
-          return NODEFS.createNode(parent, name, mode);
-        },mknod:(parent, name, mode, dev) => {
-          var node = NODEFS.createNode(parent, name, mode, dev);
-          // create the backing node for this in the fs root as well
-          var path = NODEFS.realPath(node);
-          try {
-            if (FS.isDir(node.mode)) {
-              fs.mkdirSync(path, node.mode);
-            } else {
-              fs.writeFileSync(path, '', { mode: node.mode });
-            }
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-          return node;
-        },rename:(oldNode, newDir, newName) => {
-          var oldPath = NODEFS.realPath(oldNode);
-          var newPath = PATH.join2(NODEFS.realPath(newDir), newName);
-          try {
-            fs.renameSync(oldPath, newPath);
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-          oldNode.name = newName;
-        },unlink:(parent, name) => {
-          var path = PATH.join2(NODEFS.realPath(parent), name);
-          try {
-            fs.unlinkSync(path);
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },rmdir:(parent, name) => {
-          var path = PATH.join2(NODEFS.realPath(parent), name);
-          try {
-            fs.rmdirSync(path);
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },readdir:(node) => {
-          var path = NODEFS.realPath(node);
-          try {
-            return fs.readdirSync(path);
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },symlink:(parent, newName, oldPath) => {
-          var newPath = PATH.join2(NODEFS.realPath(parent), newName);
-          try {
-            fs.symlinkSync(oldPath, newPath);
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },readlink:(node) => {
-          var path = NODEFS.realPath(node);
-          try {
-            path = fs.readlinkSync(path);
-            path = nodePath.relative(nodePath.resolve(node.mount.opts.root), path);
-            return path;
-          } catch (e) {
-            if (!e.code) throw e;
-            // node under windows can return code 'UNKNOWN' here:
-            // https://github.com/emscripten-core/emscripten/issues/15468
-            if (e.code === 'UNKNOWN') throw new FS.ErrnoError(28);
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        }},stream_ops:{open:(stream) => {
-          var path = NODEFS.realPath(stream.node);
-          try {
-            if (FS.isFile(stream.node.mode)) {
-              stream.nfd = fs.openSync(path, NODEFS.flagsForNode(stream.flags));
-            }
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },close:(stream) => {
-          try {
-            if (FS.isFile(stream.node.mode) && stream.nfd) {
-              fs.closeSync(stream.nfd);
-            }
-          } catch (e) {
-            if (!e.code) throw e;
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },read:(stream, buffer, offset, length, position) => {
-          // Node.js < 6 compatibility: node errors on 0 length reads
-          if (length === 0) return 0;
-          try {
-            return fs.readSync(stream.nfd, Buffer.from(buffer.buffer), offset, length, position);
-          } catch (e) {
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },write:(stream, buffer, offset, length, position) => {
-          try {
-            return fs.writeSync(stream.nfd, Buffer.from(buffer.buffer), offset, length, position);
-          } catch (e) {
-            throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-          }
-        },llseek:(stream, offset, whence) => {
-          var position = offset;
-          if (whence === 1) {
-            position += stream.position;
-          } else if (whence === 2) {
-            if (FS.isFile(stream.node.mode)) {
-              try {
-                var stat = fs.fstatSync(stream.nfd);
-                position += stat.size;
-              } catch (e) {
-                throw new FS.ErrnoError(NODEFS.convertNodeCode(e));
-              }
-            }
-          }
-  
-          if (position < 0) {
-            throw new FS.ErrnoError(28);
-          }
-  
-          return position;
-        },mmap:(stream, length, position, prot, flags) => {
-          if (!FS.isFile(stream.node.mode)) {
-            throw new FS.ErrnoError(43);
-          }
-  
-          var ptr = mmapAlloc(length);
-  
-          NODEFS.stream_ops.read(stream, HEAP8, ptr, length, position);
-          return { ptr: ptr, allocated: true };
-        },msync:(stream, buffer, offset, length, mmapFlags) => {
-          NODEFS.stream_ops.write(stream, buffer, 0, length, offset, false);
-          // should we check if bytesWritten and length are the same?
-          return 0;
-        }}};
-  
-  
-  
-  
-  
-  var NODERAWFS = {lookup:function(parent, name) {
-        assert(parent)
-        assert(parent.path)
-        return FS.lookupPath(`${parent.path}/${name}`).node;
-      },lookupPath:function(path, opts = {}) {
-        if (opts.parent) {
-          path = nodePath.dirname(path);
-        }
-        var st = fs.lstatSync(path);
-        var mode = NODEFS.getMode(path);
-        return { path: path, node: { id: st.ino, mode: mode, node_ops: NODERAWFS, path: path }};
-      },createStandardStreams:function() {
-        FS.createStream({ nfd: 0, position: 0, path: '', flags: 0, tty: true, seekable: false }, 0);
-        for (var i = 1; i < 3; i++) {
-          FS.createStream({ nfd: i, position: 0, path: '', flags: 577, tty: true, seekable: false }, i);
-        }
-      },cwd:function() { return process.cwd(); },chdir:function() { process.chdir.apply(void 0, arguments); },mknod:function(path, mode) {
-        if (FS.isDir(path)) {
-          fs.mkdirSync(path, mode);
-        } else {
-          fs.writeFileSync(path, '', { mode: mode });
-        }
-      },mkdir:function() { fs.mkdirSync.apply(void 0, arguments); },symlink:function() { fs.symlinkSync.apply(void 0, arguments); },rename:function() { fs.renameSync.apply(void 0, arguments); },rmdir:function() { fs.rmdirSync.apply(void 0, arguments); },readdir:function() { return ['.', '..'].concat(fs.readdirSync.apply(void 0, arguments)); },unlink:function() { fs.unlinkSync.apply(void 0, arguments); },readlink:function() { return fs.readlinkSync.apply(void 0, arguments); },stat:function() { return fs.statSync.apply(void 0, arguments); },lstat:function() { return fs.lstatSync.apply(void 0, arguments); },chmod:function() { fs.chmodSync.apply(void 0, arguments); },fchmod:function() { fs.fchmodSync.apply(void 0, arguments); },chown:function() { fs.chownSync.apply(void 0, arguments); },fchown:function() { fs.fchownSync.apply(void 0, arguments); },truncate:function() { fs.truncateSync.apply(void 0, arguments); },ftruncate:function(fd, len) {
-        // See https://github.com/nodejs/node/issues/35632
-        if (len < 0) {
-          throw new FS.ErrnoError(28);
-        }
-        fs.ftruncateSync.apply(void 0, arguments);
-      },utime:function(path, atime, mtime) { fs.utimesSync(path, atime/1000, mtime/1000); },open:function(path, flags, mode) {
-        if (typeof flags == "string") {
-          flags = FS_modeStringToFlags(flags)
-        }
-        var pathTruncated = path.split('/').map(function(s) { return s.substr(0, 255); }).join('/');
-        var nfd = fs.openSync(pathTruncated, NODEFS.flagsForNode(flags), mode);
-        var st = fs.fstatSync(nfd);
-        if (flags & 65536 && !st.isDirectory()) {
-          fs.closeSync(nfd);
-          throw new FS.ErrnoError(ERRNO_CODES.ENOTDIR);
-        }
-        var newMode = NODEFS.getMode(pathTruncated);
-        var node = { id: st.ino, mode: newMode, node_ops: NODERAWFS, path: path }
-        return FS.createStream({ nfd: nfd, position: 0, path: path, flags: flags, node: node, seekable: true }, nfd);
-      },createStream:function(stream, fd) {
-        // Call the original FS.createStream
-        var rtn = VFS.createStream(stream, fd);
-        if (typeof rtn.shared.refcnt == 'undefined') {
-          rtn.shared.refcnt = 1;
-        } else {
-          rtn.shared.refcnt++;
-        }
-        return rtn;
-      },closeStream:function(fd) {
-        if (FS.streams[fd]) {
-          FS.streams[fd].shared.refcnt--;
-        }
-        VFS.closeStream(fd);
-      },close:function(stream) {
-        FS.closeStream(stream.fd);
-        if (!stream.stream_ops && stream.shared.refcnt === 0) {
-          // this stream is created by in-memory filesystem        
-          fs.closeSync(stream.nfd);
-        }
-      },llseek:function(stream, offset, whence) {
-        if (stream.stream_ops) {
-          // this stream is created by in-memory filesystem
-          return VFS.llseek(stream, offset, whence);
-        }
-        var position = offset;
-        if (whence === 1) {
-          position += stream.position;
-        } else if (whence === 2) {
-          position += fs.fstatSync(stream.nfd).size;
-        } else if (whence !== 0) {
-          throw new FS.ErrnoError(28);
-        }
-  
-        if (position < 0) {
-          throw new FS.ErrnoError(28);
-        }
-        stream.position = position;
-        return position;
-      },read:function(stream, buffer, offset, length, position) {
-        if (stream.stream_ops) {
-          // this stream is created by in-memory filesystem
-          return VFS.read(stream, buffer, offset, length, position);
-        }
-        var seeking = typeof position != 'undefined';
-        if (!seeking && stream.seekable) position = stream.position;
-        var bytesRead = fs.readSync(stream.nfd, Buffer.from(buffer.buffer), offset, length, position);
-        // update position marker when non-seeking
-        if (!seeking) stream.position += bytesRead;
-        return bytesRead;
-      },write:function(stream, buffer, offset, length, position) {
-        if (stream.stream_ops) {
-          // this stream is created by in-memory filesystem
-          return VFS.write(stream, buffer, offset, length, position);
-        }
-        if (stream.flags & +"1024") {
-          // seek to the end before writing in append mode
-          FS.llseek(stream, 0, +"2");
-        }
-        var seeking = typeof position != 'undefined';
-        if (!seeking && stream.seekable) position = stream.position;
-        var bytesWritten = fs.writeSync(stream.nfd, Buffer.from(buffer.buffer), offset, length, position);
-        // update position marker when non-seeking
-        if (!seeking) stream.position += bytesWritten;
-        return bytesWritten;
-      },allocate:function() {
-        throw new FS.ErrnoError(138);
-      },mmap:function(stream, length, position, prot, flags) {
-        if (stream.stream_ops) {
-          // this stream is created by in-memory filesystem
-          return VFS.mmap(stream, length, position, prot, flags);
-        }
-  
-        var ptr = mmapAlloc(length);
-        FS.read(stream, HEAP8, ptr, length, position);
-        return { ptr: ptr, allocated: true };
-      },msync:function(stream, buffer, offset, length, mmapFlags) {
-        if (stream.stream_ops) {
-          // this stream is created by in-memory filesystem
-          return VFS.msync(stream, buffer, offset, length, mmapFlags);
-        }
-  
-        FS.write(stream, buffer, 0, length, offset);
-        // should we check if bytesWritten and length are the same?
-        return 0;
-      },munmap:function() {
-        return 0;
-      },ioctl:function() {
-        throw new FS.ErrnoError(59);
-      }};
-  
   var ERRNO_MESSAGES = {0:"Success",1:"Arg list too long",2:"Permission denied",3:"Address already in use",4:"Address not available",5:"Address family not supported by protocol family",6:"No more processes",7:"Socket already connected",8:"Bad file number",9:"Trying to read unreadable message",10:"Mount device busy",11:"Operation canceled",12:"No children",13:"Connection aborted",14:"Connection refused",15:"Connection reset by peer",16:"File locking deadlock error",17:"Destination address required",18:"Math arg out of domain of func",19:"Quota exceeded",20:"File exists",21:"Bad address",22:"File too large",23:"Host is unreachable",24:"Identifier removed",25:"Illegal byte sequence",26:"Connection already in progress",27:"Interrupted system call",28:"Invalid argument",29:"I/O error",30:"Socket is already connected",31:"Is a directory",32:"Too many symbolic links",33:"Too many open files",34:"Too many links",35:"Message too long",36:"Multihop attempted",37:"File or path name too long",38:"Network interface is not configured",39:"Connection reset by network",40:"Network is unreachable",41:"Too many open files in system",42:"No buffer space available",43:"No such device",44:"No such file or directory",45:"Exec format error",46:"No record locks available",47:"The link has been severed",48:"Not enough core",49:"No message of desired type",50:"Protocol not available",51:"No space left on device",52:"Function not implemented",53:"Socket is not connected",54:"Not a directory",55:"Directory not empty",56:"State not recoverable",57:"Socket operation on non-socket",59:"Not a typewriter",60:"No such device or address",61:"Value too large for defined data type",62:"Previous owner died",63:"Not super-user",64:"Broken pipe",65:"Protocol error",66:"Unknown protocol",67:"Protocol wrong type for socket",68:"Math result not representable",69:"Read only file system",70:"Illegal seek",71:"No such process",72:"Stale file handle",73:"Connection timed out",74:"Text file busy",75:"Cross-device link",100:"Device not a stream",101:"Bad font file fmt",102:"Invalid slot",103:"Invalid request code",104:"No anode",105:"Block device required",106:"Channel number out of range",107:"Level 3 halted",108:"Level 3 reset",109:"Link number out of range",110:"Protocol driver not attached",111:"No CSI structure available",112:"Level 2 halted",113:"Invalid exchange",114:"Invalid request descriptor",115:"Exchange full",116:"No data (for no delay io)",117:"Timer expired",118:"Out of streams resources",119:"Machine is not on the network",120:"Package not installed",121:"The object is remote",122:"Advertise error",123:"Srmount error",124:"Communication error on send",125:"Cross mount point (not really error)",126:"Given log. name not unique",127:"f.d. invalid for this operation",128:"Remote address changed",129:"Can   access a needed shared lib",130:"Accessing a corrupted shared lib",131:".lib section in a.out corrupted",132:"Attempting to link in too many libs",133:"Attempting to exec a shared library",135:"Streams pipe error",136:"Too many users",137:"Socket type not supported",138:"Not supported",139:"Protocol family not supported",140:"Can't send after socket shutdown",141:"Too many references",142:"Host is down",148:"No medium (in tape drive)",156:"Level 2 not synchronized"};
   
+  var ERRNO_CODES = {};
   
   function demangle(func) {
       warnOnce('warning: build with -sDEMANGLE_SUPPORT to link in libcxxabi demangling');
@@ -3462,7 +3159,6 @@ function is_timeout(diff) { if (Module.timeout === -1) return 0; else { return M
   
         FS.filesystems = {
           'MEMFS': MEMFS,
-          'NODEFS': NODEFS,
         };
       },init:(input, output, error) => {
         assert(!FS.init.initialized, 'FS.init was previously called. If you want to initialize later with custom parameters, remove any earlier calls (note that one is automatically added to the generated code)');
@@ -5183,7 +4879,6 @@ function is_timeout(diff) { if (Module.timeout === -1) return 0; else { return M
   FS.FSNode = FSNode;
   FS.createPreloadedFile = FS_createPreloadedFile;
   FS.staticInit();;
-if (ENVIRONMENT_IS_NODE) { NODEFS.staticInit(); };
 ERRNO_CODES = {
       'EPERM': 63,
       'ENOENT': 44,
@@ -5307,27 +5002,6 @@ ERRNO_CODES = {
       'EOWNERDEAD': 62,
       'ESTRPIPE': 135,
     };;
-
-      if (ENVIRONMENT_IS_NODE) {
-        var _wrapNodeError = function(func) {
-          return function() {
-            try {
-              return func.apply(this, arguments)
-            } catch (e) {
-              if (e.code) {
-                throw new FS.ErrnoError(ERRNO_CODES[e.code]);
-              }
-              throw e;
-            }
-          }
-        };
-        var VFS = Object.assign({}, FS);
-        for (var _key in NODERAWFS) {
-          FS[_key] = _wrapNodeError(NODERAWFS[_key]);
-        }
-      } else {
-        throw new Error("NODERAWFS is currently only supported on Node.js environment.")
-      };
 function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
@@ -5686,8 +5360,6 @@ var unexportedSymbols = [
   'TTY',
   'PIPEFS',
   'SOCKFS',
-  'NODEFS',
-  'NODERAWFS',
   'tempFixedLengthArray',
   'miniTempWebGLFloatBuffers',
   'miniTempWebGLIntBuffers',

@@ -1,57 +1,49 @@
-# pcm-to-mp3-wasm
+# pcm-to-mp3-wasm-node
 
-A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3**. 
+A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3** in Node.js. 
 
 - ✅ **Tiny bundle**: ~2MB (vs ~30MB for full ffmpeg.wasm)
 - ✅ **Zero dependencies**: No `@ffmpeg/ffmpeg` required
-- ✅ **Non-blocking**: Runs in a Web Worker
+- ✅ **In-memory**: Uses virtual filesystem (MEMFS), no disk I/O
 - ✅ **TypeScript**: Full type definitions included
 
-> **For server-side Node.js usage**, see the companion package: [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node)
+> **For browser/web worker usage**, see the companion package: [`pcm-to-mp3-wasm`](https://www.npmjs.com/package/pcm-to-mp3-wasm)
 
 ## Installation
 
 ```bash
-npm install pcm-to-mp3-wasm
+npm install pcm-to-mp3-wasm-node
 ```
-
-## Build Formats
-
-| Build | Import Path | Use Case |
-|-------|-------------|----------|
-| **ESM** | `pcm-to-mp3-wasm` | Modern bundlers (Vite, Webpack 5, Next.js, Rollup) |
-| **UMD** | `pcm-to-mp3-wasm/dist/umd` | Legacy bundlers, script tags, CommonJS |
 
 ## Quick Start
 
 ```typescript
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
+import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
 
-// One-shot conversion (creates & terminates worker automatically)
-const mp3Data = await convertPcmToMp3(pcmData, {
+// One-shot conversion
+const mp3Data = await convertPcmToMp3(pcmBuffer, {
   sampleRate: 44100,
   channels: 1,
   bitrate: 128
 });
 ```
 
-## Reusable Converter
+## Reusable Converter (Recommended for Servers)
+
+> [!IMPORTANT]
+> **For HTTP servers and APIs**: Always use `createConverter()` to pre-load FFmpeg once at startup. 
+> The one-shot `convertPcmToMp3()` reloads FFmpeg on every call (~3-10s overhead), while a pre-loaded converter runs in **under 1 second**.
 
 For multiple conversions, create a reusable converter to avoid loading FFmpeg each time:
 
 ```typescript
-import { createConverter } from 'pcm-to-mp3-wasm';
+import { createConverter } from 'pcm-to-mp3-wasm-node';
 
 const converter = await createConverter();
 
 // Convert multiple files efficiently
 const mp3_1 = await converter.convert(pcm1, { sampleRate: 44100 });
 const mp3_2 = await converter.convert(pcm2, { sampleRate: 22050 });
-
-// Progress tracking
-converter.onProgress((progress) => {
-  console.log(`${(progress * 100).toFixed(0)}% complete`);
-});
 
 // Clean up when done
 converter.terminate();
@@ -78,17 +70,13 @@ converter.terminate();
 | `f64le` | 64-bit float little-endian |
 | `u8` | Unsigned 8-bit |
 
-## Framework Integration
-
-- [Next.js Integration Guide](./NEXTJS.md)
-
 ## API Reference
 
 ### `convertPcmToMp3(pcmData, options?)`
 
-One-shot conversion. Creates a worker, converts, and terminates.
+One-shot conversion. Loads FFmpeg, converts, and releases resources.
 
-- **pcmData**: `Uint8Array` - Raw PCM audio data
+- **pcmData**: `Uint8Array | Buffer` - Raw PCM audio data
 - **options**: `PcmToMp3Options` - Conversion options
 - **Returns**: `Promise<Uint8Array>` - MP3 audio data
 
@@ -96,8 +84,8 @@ One-shot conversion. Creates a worker, converts, and terminates.
 
 Creates a reusable converter instance.
 
-- **config.coreURL**: Custom URL for ffmpeg-core.js
-- **config.wasmURL**: Custom URL for ffmpeg-core.wasm
+- **config.corePath**: Custom path for ffmpeg-core.js
+- **config.wasmPath**: Custom path for ffmpeg-core.wasm
 - **Returns**: `Promise<PcmToMp3Converter>`
 
 ### `PcmToMp3Converter`
@@ -121,42 +109,40 @@ This package uses a **single-threaded** FFmpeg WASM build by design.
 | **Memory** | 16MB (growable) | 1024MB (fixed) |
 | **Bundle Size** | ~1.94 MB | ~2.5 MB (+25%) |
 | **Conversion Speed** | Baseline | ~1.5-2x faster |
-| **Browser Requirements** | None | SharedArrayBuffer + COOP/COEP headers |
+| **Compatibility** | All Node.js | All Node.js |
 
 For typical audio conversions (up to 10 minutes at 44.1kHz), single-threaded conversion takes **2.5-4 seconds**, which is acceptable for most use cases while offering:
 
-- Maximum browser compatibility (no special headers required)
 - Lower memory footprint
 - Smaller bundle size
+- Simpler deployment
 
 For detailed benchmarks and trade-off analysis, see the [Performance Analysis](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/docs/specs/pcm-to-mp3/performance_analysis.md).
 
-## Server-Side Node.js Usage
+## Use Cases
 
-For server-side audio conversion with in-memory filesystem (no disk I/O), use the companion package:
+This package is ideal for:
+
+- **Server-side TTS processing**: Convert PCM from speech synthesis APIs to MP3
+- **Audio file conversion**: Batch processing of audio files
+- **Serverless functions**: Lightweight audio processing in cloud functions
+
+## Browser/Web Worker Usage
+
+For client-side audio conversion that runs in a Web Worker (non-blocking), use the companion package:
 
 ```bash
-npm install pcm-to-mp3-wasm-node
+npm install pcm-to-mp3-wasm
 ```
 
 ```typescript
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
 
-// Same API, optimized for Node.js
-const mp3Data = await convertPcmToMp3(pcmBuffer, { sampleRate: 44100 });
+// Same API, but runs in a Web Worker
+const mp3Data = await convertPcmToMp3(pcmData, { sampleRate: 44100 });
 ```
 
-See: [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node)
-
-## Development
-
-Build commands:
-
-```bash
-# Worker build (browser/web worker environment)
-make dev-mp3           # Development build
-make prd-mp3           # Production build (optimized)
-```
+See: [`pcm-to-mp3-wasm`](https://www.npmjs.com/package/pcm-to-mp3-wasm)
 
 ## License
 

@@ -27,7 +27,8 @@ CONF_FLAGS=(
   -Wno-deprecated-declarations 
   $LDFLAGS 
   -sENVIRONMENT=node                       # Node.js environment
-  -sNODERAWFS                              # Use native Node.js filesystem
+  # Note: NOT using NODERAWFS - we want MEMFS for in-memory conversion
+  # NODERAWFS would require disk I/O, but MEMFS allows virtual filesystem
   -sWASM_BIGINT                            # enable big int support
   -sINITIAL_MEMORY=32MB                    # larger memory for server workloads
   -sALLOW_MEMORY_GROWTH                    # allow memory to grow if needed

@@ -1,0 +1,64 @@
+{
+    "name": "pcm-to-mp3-wasm-node",
+    "version": "0.1.2",
+    "description": "Node.js FFmpeg WASM for PCM to MP3 conversion with in-memory filesystem (memfs). Server-side audio processing without disk I/O.",
+    "type": "module",
+    "main": "./dist/esm/index.js",
+    "types": "./dist/esm/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "import": "./dist/esm/index.js"
+        },
+        "./core": {
+            "import": "./dist/esm/ffmpeg-core.js"
+        },
+        "./wasm": {
+            "import": "./dist/esm/ffmpeg-core.wasm"
+        }
+    },
+    "scripts": {
+        "clean": "rimraf dist/esm/*.ts dist/esm/*.js.map dist/esm/*.d.ts",
+        "build:ts": "tsc",
+        "build": "npm run build:ts",
+        "prepublishOnly": "npm run build"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/huydhoang/pcm-to-mp3-wasm.git"
+    },
+    "keywords": [
+        "ffmpeg",
+        "WebAssembly",
+        "wasm",
+        "audio",
+        "mp3",
+        "pcm",
+        "encoder",
+        "nodejs",
+        "server-side",
+        "memfs",
+        "in-memory"
+    ],
+    "author": "",
+    "license": "GPL-2.0-or-later",
+    "bugs": {
+        "url": "https://github.com/huydhoang/pcm-to-mp3-wasm/issues"
+    },
+    "engines": {
+        "node": ">=18.x"
+    },
+    "homepage": "https://github.com/huydhoang/pcm-to-mp3-wasm#readme",
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "rimraf": "^5.0.0",
+        "typescript": "^5.0.0"
+    }
+}

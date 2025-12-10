@@ -4,7 +4,7 @@
     "description": "Isolated test for pcm-to-mp3-wasm",
     "type": "module",
     "scripts": {
-        "test": "tsx test.ts"
+        "dev": "tsx server.ts"
     },
     "dependencies": {
         "dotenv": "^16.4.5"

@@ -249,6 +249,69 @@ Navigate to `http://localhost:3333/test-pcm-to-mp3/index.html` and test with `sa
 
 ---
 
+## Test Node.js Build
+
+The worker build can be tested in Node.js with an HTTP server that demonstrates true in-memory PCM-to-MP3 conversion (no disk I/O).
+
+> [!NOTE]
+> The **worker build** (`core-mp3`) uses MEMFS (virtual filesystem) which works in Node.js.
+> The **node build** (`core-mp3-node`) uses NODERAWFS which requires disk I/O.
+> For serverless environments like Vercel, use the worker build for in-memory conversion.
+
+### Prerequisites
+
+1. Set your Cartesia API key in `test-pcm-to-mp3/.env`:
+
+```
+CARTESIA_API_KEY=your_api_key_here
+```
+
+2. Ensure the worker build exists in `packages/core-mp3/dist/esm/`
+
+### Run the Test Server
+
+```bash
+cd test-pcm-to-mp3
+npx tsx server.ts
+```
+
+Then open: **http://localhost:3456**
+
+### What the Test Does
+
+The server:
+1. Serves an HTML page with a text input and audio player
+2. On button click, fetches PCM from Cartesia TTS via SSE
+3. Converts PCM to MP3 using FFmpeg WASM **entirely in memory**
+4. Streams the MP3 back to the browser for playback
+5. Displays conversion stats (PCM size, MP3 size, compression ratio)
+
+### Expected Server Output
+
+```
+🚀 PCM-to-MP3 WASM Test Server (In-Memory)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 Open: http://localhost:3456
+💾 Mode: In-memory (MEMFS, no disk I/O)
+
+Waiting for requests...
+
+🎙️  New request...
+📄 Text: "Hello! This is a test..."
+✅ PCM: 720.00 KB
+⚡ Conversion: 0.42s
+✅ MP3: 57.00 KB
+📉 Compression: 92.1%
+```
+
+The test demonstrates:
+- ✅ Real-time streaming from Cartesia TTS SSE endpoint
+- ✅ Loading FFmpeg WASM in Node.js
+- ✅ True in-memory PCM-to-MP3 conversion (no disk I/O)
+- ✅ Serving MP3 audio for browser playback
+
+---
+
 ## Related Documentation
 
 - [Performance Analysis](./performance_analysis.md) - File sizes, conversion times, ST vs MT trade-offs

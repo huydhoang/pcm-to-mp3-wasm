@@ -5,6 +5,7 @@
         "moduleResolution": "bundler",
         "esModuleInterop": true,
         "strict": true,
+        "noImplicitAny": false,
         "skipLibCheck": true,
         "noEmit": true,
         "types": [
@@ -12,6 +13,8 @@
         ]
     },
     "include": [
-        "*.ts"
+        "*.ts",
+        "*.d.ts",
+        "../packages/core-mp3-node/src/**/*.d.ts"
     ]
 }
