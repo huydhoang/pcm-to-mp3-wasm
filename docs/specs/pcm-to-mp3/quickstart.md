@@ -209,11 +209,11 @@ docker buildx build `
 packages/core-mp3/
 ├── dist/
 │   ├── esm/
-│   │   ├── ffmpeg-core.js      (200 KB)
+│   │   ├── ffmpeg-core.js      (201 KB)
 │   │   └── ffmpeg-core.wasm    (1.61 MB)
 │   └── umd/
 │       ├── ffmpeg-core.js      (201 KB)
-│       └── ffmpeg-core.wasm    (1.94 MB)
+│       └── ffmpeg-core.wasm    (1.61MB)
 ├── package.json
 └── README.md
 ```
