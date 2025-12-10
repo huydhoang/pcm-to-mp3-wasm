@@ -13,12 +13,16 @@ Build a minimal FFmpeg WASM module optimized for PCM to MP3 conversion.
 
 ## Prerequisites
 
-- Docker with `buildx` support
-- Make
+- **Docker Desktop** running with `buildx` support
+  - On Windows: Ensure Docker Desktop is running (check system tray icon)
+  - Verify with: `docker info` (should not show connection errors)
+- **Make** (Linux/GitBash only - Windows users should use Docker commands directly)
 
 ---
 
 ## Quick Build Commands
+
+### Linux / GitBash
 
 ```bash
 # Worker build (browser/web worker)
@@ -31,6 +35,33 @@ make prd-mp3-node     # Production
 
 # Build all variants
 make build-mp3-all
+```
+
+### PowerShell 7 (Windows)
+
+> [!NOTE]
+> The Makefile uses Unix commands (`rm -rf`) that don't work on Windows.
+> Use Docker commands directly instead.
+
+```powershell
+# Clean output directory first
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./packages/core-mp3/dist
+
+# Production Worker build
+docker buildx build `
+  --build-arg EXTRA_CFLAGS="-O3 -msimd128" `
+  --build-arg FFMPEG_ST=yes `
+  -f Dockerfile.prod `
+  -o ./packages/core-mp3 .
+
+# Production Node.js build
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./packages/core-mp3-node/dist
+docker buildx build `
+  --build-arg EXTRA_CFLAGS="-O3 -msimd128" `
+  --build-arg FFMPEG_ST=yes `
+  --build-arg FFMPEG_BUILD_SCRIPT=ffmpeg-wasm-mp3-node.sh `
+  -f Dockerfile.prod `
+  -o ./packages/core-mp3-node .
 ```
 
 ---
@@ -95,9 +126,14 @@ Only formats supported by [Cartesia SSE API](https://docs.cartesia.ai/api-refere
 
 ## Underlying Docker Commands
 
-The Makefile targets wrap these Docker commands:
+The Makefile targets wrap these Docker commands.
+
+> [!IMPORTANT]
+> Ensure Docker Desktop is running before executing these commands.
 
 ### Development Build (Worker)
+
+#### Linux / GitBash
 
 ```bash
 docker buildx build \
@@ -108,7 +144,20 @@ docker buildx build \
   --progress=plain .
 ```
 
+#### PowerShell 7
+
+```powershell
+docker buildx build `
+  --build-arg EXTRA_CFLAGS="--profiling" `
+  --build-arg FFMPEG_ST=yes `
+  -f Dockerfile.prod `
+  -o ./packages/core-mp3 `
+  --progress=plain .
+```
+
 ### Production Build (Worker)
+
+#### Linux / GitBash
 
 ```bash
 docker buildx build \
@@ -118,7 +167,19 @@ docker buildx build \
   -o ./packages/core-mp3 .
 ```
 
+#### PowerShell 7
+
+```powershell
+docker buildx build `
+  --build-arg EXTRA_CFLAGS="-O3 -msimd128" `
+  --build-arg FFMPEG_ST=yes `
+  -f Dockerfile.prod `
+  -o ./packages/core-mp3 .
+```
+
 ### Production Build (Node.js)
+
+#### Linux / GitBash
 
 ```bash
 docker buildx build \
@@ -126,6 +187,17 @@ docker buildx build \
   --build-arg FFMPEG_ST=yes \
   --build-arg FFMPEG_BUILD_SCRIPT=ffmpeg-wasm-mp3-node.sh \
   -f Dockerfile.prod \
+  -o ./packages/core-mp3-node .
+```
+
+#### PowerShell 7
+
+```powershell
+docker buildx build `
+  --build-arg EXTRA_CFLAGS="-O3 -msimd128" `
+  --build-arg FFMPEG_ST=yes `
+  --build-arg FFMPEG_BUILD_SCRIPT=ffmpeg-wasm-mp3-node.sh `
+  -f Dockerfile.prod `
   -o ./packages/core-mp3-node .
 ```
 
@@ -149,6 +221,15 @@ packages/core-mp3/
 ---
 
 ## Verify Build
+
+### Linux / GitBash
+
+```bash
+# Check file sizes
+find packages/core-mp3/dist -type f -exec ls -lh {} \;
+```
+
+### PowerShell 7
 
 ```powershell
 # Check file sizes
