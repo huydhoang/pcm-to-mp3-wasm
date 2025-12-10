@@ -7,6 +7,8 @@ A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3**.
 - ✅ **Non-blocking**: Runs in a Web Worker
 - ✅ **TypeScript**: Full type definitions included
 
+> **Note:** This build is compiled for **Web Worker environments only**. It runs audio conversion in a background thread to keep the browser UI responsive. Main thread (blocking) execution and Node.js server-side usage are not supported.
+
 ## Installation
 
 ```bash
