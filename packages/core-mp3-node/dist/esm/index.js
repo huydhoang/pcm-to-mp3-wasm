@@ -6,6 +6,20 @@
  *
  * @packageDocumentation
  */
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { readFile } from 'node:fs/promises';
+// Platform-agnostic path resolution (works on Windows, Mac, and Linux)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+// Use createRequire to load the FFmpeg core - bundlers ignore require()
+const require = createRequire(import.meta.url);
+// Resolve paths using join() for platform-agnostic paths
+// Windows: C:\Users\...\ffmpeg-core.wasm
+// Linux:   /home/.../ffmpeg-core.wasm
+const wasmPath = join(__dirname, 'ffmpeg-core.wasm');
+const coreJsPath = join(__dirname, 'ffmpeg-core.js');
 /**
  * Default conversion options
  */
@@ -49,18 +63,19 @@ export class PcmToMp3Converter {
         if (this.#loaded && this.#ffmpeg) {
             return;
         }
-        // Dynamic import of the FFmpeg core
+        // Read the WASM file directly using Node.js fs - avoids all path resolution issues
+        const wasmBinary = await readFile(wasmPath);
+        // Load FFmpeg core using require() - bundlers ignore require()
         let createFFmpegCore;
         if (this.#config?.corePath) {
-            const module = await import(this.#config.corePath);
-            createFFmpegCore = module.default;
+            createFFmpegCore = require(this.#config.corePath).default;
         }
         else {
-            // Import from the same package
-            const module = await import('./ffmpeg-core.js');
-            createFFmpegCore = module.default;
+            // Require from the platform-agnostic path
+            createFFmpegCore = require(coreJsPath).default;
         }
-        this.#ffmpeg = await createFFmpegCore();
+        // Pass wasmBinary directly instead of letting FFmpeg fetch it
+        this.#ffmpeg = await createFFmpegCore({ wasmBinary });
         await this.#ffmpeg.ready;
         // Set up logging
         this.#ffmpeg.setLogger(({ type, message }) => {

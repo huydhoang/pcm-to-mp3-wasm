@@ -1,6 +1,6 @@
 {
     "name": "pcm-to-mp3-wasm-node",
-    "version": "0.2.0",
+    "version": "0.2.5",
     "description": "Node.js FFmpeg WASM for PCM to MP3 conversion with in-memory filesystem (memfs). Server-side audio processing without disk I/O.",
     "type": "module",
     "main": "./dist/esm/index.js",
