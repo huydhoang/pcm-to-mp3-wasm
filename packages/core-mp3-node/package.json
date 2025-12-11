@@ -1,6 +1,6 @@
 {
     "name": "ffmpeg-mp3-node",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Node.js FFmpeg WASM for PCM to MP3 conversion with in-memory filesystem (memfs). Server-side audio processing without disk I/O.",
     "type": "module",
     "main": "./dist/esm/index.js",
@@ -19,8 +19,9 @@
     },
     "scripts": {
         "clean": "rimraf dist/esm/*.ts dist/esm/*.js.map dist/esm/*.d.ts",
+        "generate:wasm": "node scripts/generate-wasm-base64.cjs",
         "build:ts": "tsc",
-        "build": "npm run build:ts",
+        "build": "npm run generate:wasm && npm run build:ts",
         "prepublishOnly": "npm run build"
     },
     "files": [

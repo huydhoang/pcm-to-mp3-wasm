@@ -139,6 +139,33 @@ Cross-Origin-Embedder-Policy: require-corp
 
 ---
 
+## Base64 WASM Embedding (ffmpeg-mp3-node)
+
+The `ffmpeg-mp3-node` package embeds the WASM binary as a base64 string to eliminate `import.meta.url` dependencies and ensure compatibility with all bundlers (Turbopack, Webpack, Vercel serverless, etc.).
+
+### Trade-offs
+
+| Factor | Impact |
+|--------|--------|
+| **Bundle Size** | +33% (~1.61 MB WASM → ~2.15 MB base64 string) |
+| **Startup Overhead** | ~10-30ms for base64 decode on modern V8 |
+| **Memory Spike** | Temporary duplication during decode (base64 + decoded buffer) |
+| **Build Time** | Slightly longer due to larger bundle |
+
+### Why It's Acceptable for Server-Side
+
+| Consideration | Analysis |
+|---------------|----------|
+| **Cold Start** | Vercel serverless cold starts take 100-500ms+; 10-30ms decode is noise |
+| **Singleton Pattern** | `createConverter()` pre-loads FFmpeg once; decode cost is amortized |
+| **Execution Speed** | After decode, WASM execution is **identical** to file-based loading |
+| **Reliability** | Eliminates all bundler path resolution failures |
+
+> [!TIP]
+> The base64 embedding approach is a common pattern for WASM libraries that need reliable operation across diverse bundler environments. For pure server-side Node.js usage, the trade-offs are negligible.
+
+---
+
 ## References
 
 - [Cartesia TTS API](https://docs.cartesia.ai/api-reference/tts/bytes)

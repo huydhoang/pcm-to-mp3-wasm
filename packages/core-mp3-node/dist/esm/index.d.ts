@@ -4,6 +4,9 @@
  * A minimal FFmpeg WebAssembly module for converting PCM audio to MP3 in Node.js.
  * Uses in-memory virtual filesystem (MEMFS) for zero disk I/O.
  *
+ * The WASM binary is embedded as base64 to eliminate import.meta.url dependencies
+ * and ensure compatibility with all bundlers (Turbopack, Webpack, Vercel, etc.)
+ *
  * @packageDocumentation
  */
 import type { PcmToMp3Options, ConverterConfig, ProgressCallback, LogCallback } from './types.js';

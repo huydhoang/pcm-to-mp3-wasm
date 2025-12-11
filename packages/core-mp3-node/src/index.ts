@@ -4,13 +4,15 @@
  * A minimal FFmpeg WebAssembly module for converting PCM audio to MP3 in Node.js.
  * Uses in-memory virtual filesystem (MEMFS) for zero disk I/O.
  * 
+ * The WASM binary is embedded as base64 to eliminate import.meta.url dependencies
+ * and ensure compatibility with all bundlers (Turbopack, Webpack, Vercel, etc.)
+ * 
  * @packageDocumentation
  */
 
-import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { WASM_BASE64 } from './wasm-base64.js';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+import _createFFmpegCore from './ffmpeg-core.js';
 
 import type {
     PcmToMp3Options,
@@ -23,18 +25,11 @@ import type {
 // Re-export types
 export type { PcmToMp3Options, ConverterConfig, ProgressCallback, LogCallback, PcmFormat } from './types.js';
 
-// Platform-agnostic path resolution (works on Windows, Mac, and Linux)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Use createRequire to load the FFmpeg core - bundlers ignore require()
-const require = createRequire(import.meta.url);
-
-// Resolve paths using join() for platform-agnostic paths
-// Windows: C:\Users\...\ffmpeg-core.wasm
-// Linux:   /home/.../ffmpeg-core.wasm
-const wasmPath = join(__dirname, 'ffmpeg-core.wasm');
-const coreJsPath = join(__dirname, 'ffmpeg-core.js');
+/**
+ * Decode the embedded base64 WASM to a Uint8Array.
+ * This is done once at module load time (~10-30ms for ~2.2MB base64).
+ */
+const wasmBinary = Buffer.from(WASM_BASE64, 'base64');
 
 /**
  * Default conversion options
@@ -64,6 +59,9 @@ interface FFmpegCoreOptions {
 }
 
 type FFmpegCoreFactory = (options?: FFmpegCoreOptions) => Promise<FFmpegCore>;
+
+// Cast the imported function to our factory type
+const createFFmpegCore = _createFFmpegCore as unknown as FFmpegCoreFactory;
 
 /**
  * PCM to MP3 Converter class for Node.js
@@ -102,20 +100,8 @@ export class PcmToMp3Converter {
             return;
         }
 
-        // Read the WASM file directly using Node.js fs - avoids all path resolution issues
-        const wasmBinary = await readFile(wasmPath);
-
-        // Load FFmpeg core using require() - bundlers ignore require()
-        let createFFmpegCore: FFmpegCoreFactory;
-
-        if (this.#config?.corePath) {
-            createFFmpegCore = require(this.#config.corePath).default;
-        } else {
-            // Require from the platform-agnostic path
-            createFFmpegCore = require(coreJsPath).default;
-        }
-
-        // Pass wasmBinary directly instead of letting FFmpeg fetch it
+        // Use the pre-decoded WASM binary (decoded at module load time)
+        // and the imported createFFmpegCore (no require() needed)
         this.#ffmpeg = await createFFmpegCore({ wasmBinary });
         await this.#ffmpeg.ready;
 

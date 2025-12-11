@@ -6,6 +6,10 @@ A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3** in Node.
 - ✅ **Zero dependencies**: No `@ffmpeg/ffmpeg` required
 - ✅ **In-memory**: Uses virtual filesystem (MEMFS), no disk I/O
 - ✅ **TypeScript**: Full type definitions included
+- ✅ **Bundler compatible**: Works with Turbopack, Webpack, Vercel, etc.
+
+> [!NOTE]
+> **Architecture**: The WASM binary is embedded as base64 to eliminate `import.meta.url` path resolution issues. This adds ~10-30ms decode time at startup (negligible for server use) but ensures reliable operation across all bundlers and serverless platforms. See [Performance Analysis](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/docs/specs/pcm-to-mp3/performance_analysis.md#base64-wasm-embedding-ffmpeg-mp3-node) for trade-offs.
 
 > **For browser/web worker usage**, see the companion package: [`ffmpeg-mp3-worker`](https://www.npmjs.com/package/ffmpeg-mp3-worker)
 
