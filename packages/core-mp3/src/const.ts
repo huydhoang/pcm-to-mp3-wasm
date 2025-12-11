@@ -1,5 +1,5 @@
 /**
- * pcm-to-mp3-wasm - Constants
+ * ffmpeg-mp3-worker - Constants
  */
 
 import type { PcmToMp3Options } from './types.js';

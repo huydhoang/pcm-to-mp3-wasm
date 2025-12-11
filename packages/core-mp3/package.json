@@ -1,6 +1,6 @@
 {
-    "name": "pcm-to-mp3-wasm",
-    "version": "0.2.0",
+    "name": "ffmpeg-mp3-worker",
+    "version": "0.1.2",
     "description": "Minimal FFmpeg WASM for PCM to MP3 conversion (~2MB). Zero dependencies, Web Worker support, non-blocking.",
     "type": "module",
     "main": "./dist/esm/index.js",

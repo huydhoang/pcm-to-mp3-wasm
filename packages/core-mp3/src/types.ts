@@ -1,5 +1,5 @@
 /**
- * pcm-to-mp3-wasm - TypeScript type definitions
+ * ffmpeg-mp3-worker - TypeScript type definitions
  */
 
 // PCM format types supported by the converter
