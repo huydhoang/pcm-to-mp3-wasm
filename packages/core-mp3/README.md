@@ -1,4 +1,4 @@
-# pcm-to-mp3-wasm
+# ffmpeg-mp3-worker
 
 A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3** in the browser.
 
@@ -10,25 +10,25 @@ A minimal FFmpeg WebAssembly module for converting **PCM audio to MP3** in the b
 > [!IMPORTANT]
 > This package **automatically uses a Web Worker** internally for all conversions.
 > You call the API from your client component (`'use client'`), and the package handles worker creation.
-> For server-side Node.js usage, see [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node).
+> For server-side Node.js usage, see [`ffmpeg-mp3-node`](https://www.npmjs.com/package/ffmpeg-mp3-node).
 
 ## Installation
 
 ```bash
-npm install pcm-to-mp3-wasm
+npm install ffmpeg-mp3-worker
 ```
 
 ## Build Formats
 
 | Build | Import Path | Use Case |
 |-------|-------------|----------|
-| **ESM** | `pcm-to-mp3-wasm` | Modern bundlers (Vite, Webpack 5, Next.js, Rollup) |
-| **UMD** | `pcm-to-mp3-wasm/dist/umd` | Legacy bundlers, script tags, CommonJS |
+| **ESM** | `ffmpeg-mp3-worker` | Modern bundlers (Vite, Webpack 5, Next.js, Rollup) |
+| **UMD** | `ffmpeg-mp3-worker/dist/umd` | Legacy bundlers, script tags, CommonJS |
 
 ## Quick Start
 
 ```typescript
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
+import { convertPcmToMp3 } from 'ffmpeg-mp3-worker';
 
 // One-shot conversion (creates & terminates worker automatically)
 const mp3Data = await convertPcmToMp3(pcmData, {
@@ -43,7 +43,7 @@ const mp3Data = await convertPcmToMp3(pcmData, {
 For multiple conversions, create a reusable converter to avoid loading FFmpeg each time:
 
 ```typescript
-import { createConverter } from 'pcm-to-mp3-wasm';
+import { createConverter } from 'ffmpeg-mp3-worker';
 
 const converter = await createConverter();
 
@@ -137,17 +137,17 @@ For detailed benchmarks, see the [Performance Analysis](https://github.com/huydh
 For server-side audio conversion with in-memory filesystem (no disk I/O), use the companion package:
 
 ```bash
-npm install pcm-to-mp3-wasm-node
+npm install ffmpeg-mp3-node
 ```
 
 ```typescript
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+import { convertPcmToMp3 } from 'ffmpeg-mp3-node';
 
 // Same API, optimized for Node.js
 const mp3Data = await convertPcmToMp3(pcmBuffer, { sampleRate: 44100 });
 ```
 
-See: [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node)
+See: [`ffmpeg-mp3-node`](https://www.npmjs.com/package/ffmpeg-mp3-node)
 
 ## Development
 

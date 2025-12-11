@@ -1,5 +1,5 @@
 /**
- * pcm-to-mp3-wasm
+ * ffmpeg-mp3-worker
  *
  * A minimal FFmpeg WebAssembly module for converting PCM audio to MP3.
  * Runs in a Web Worker to avoid blocking the main thread.
@@ -200,7 +200,7 @@ async function _PcmToMp3Converter_ensureLoaded() {
  *
  * @example
  * ```typescript
- * import { createConverter } from 'pcm-to-mp3-wasm';
+ * import { createConverter } from 'ffmpeg-mp3-worker';
  *
  * const converter = await createConverter();
  *
@@ -233,7 +233,7 @@ export async function createConverter(config) {
  *
  * @example
  * ```typescript
- * import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
+ * import { convertPcmToMp3 } from 'ffmpeg-mp3-worker';
  *
  * const mp3Data = await convertPcmToMp3(pcmData, {
  *   sampleRate: 44100,

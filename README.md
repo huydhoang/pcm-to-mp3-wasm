@@ -1,4 +1,4 @@
-# pcm-to-mp3-wasm
+# ffmpeg-mp3-worker
 
 A minimal FFmpeg WebAssembly build for **PCM to MP3 audio conversion**.
 
@@ -15,8 +15,8 @@ This monorepo produces two minimal npm packages optimized for **PCM to MP3 conve
 
 | Package | Environment | Use Case |
 |---------|-------------|----------|
-| [`pcm-to-mp3-wasm`](https://www.npmjs.com/package/pcm-to-mp3-wasm) | Browser (Web Worker) | Client-side conversion, React/Next.js |
-| [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node) | Node.js (MEMFS) | API routes, serverless, CLI |
+| [`ffmpeg-mp3-worker`](https://www.npmjs.com/package/ffmpeg-mp3-worker) | Browser (Web Worker) | Client-side conversion, React/Next.js |
+| [`ffmpeg-mp3-node`](https://www.npmjs.com/package/ffmpeg-mp3-node) | Node.js (MEMFS) | API routes, serverless, CLI |
 
 ## Single-Threaded by Design ✅
 
@@ -34,11 +34,11 @@ For detailed benchmarks and trade-offs, see the [Performance Analysis](./docs/sp
 ### Browser (Web Worker)
 
 ```bash
-npm install pcm-to-mp3-wasm
+npm install ffmpeg-mp3-worker
 ```
 
 ```typescript
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm';
+import { convertPcmToMp3 } from 'ffmpeg-mp3-worker';
 
 const mp3Data = await convertPcmToMp3(pcmData, {
   sampleRate: 44100,
@@ -50,11 +50,11 @@ const mp3Data = await convertPcmToMp3(pcmData, {
 ### Node.js (Server-Side)
 
 ```bash
-npm install pcm-to-mp3-wasm-node
+npm install ffmpeg-mp3-node
 ```
 
 ```typescript
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+import { convertPcmToMp3 } from 'ffmpeg-mp3-node';
 
 const mp3Data = await convertPcmToMp3(pcmBuffer, {
   sampleRate: 44100,
@@ -85,8 +85,8 @@ Only the codecs needed for PCM to MP3 conversion:
 
 - [Build Quickstart](./docs/specs/pcm-to-mp3/quickstart.md) — Build commands, Docker setup
 - [Performance Analysis](./docs/specs/pcm-to-mp3/performance_analysis.md) — Benchmarks, ST vs MT trade-offs
-- [pcm-to-mp3-wasm README](./packages/core-mp3/README.md) — Browser package API
-- [pcm-to-mp3-wasm-node README](./packages/core-mp3-node/README.md) — Node.js package API
+- [ffmpeg-mp3-worker README](./packages/core-mp3/README.md) — Browser package API
+- [ffmpeg-mp3-node README](./packages/core-mp3-node/README.md) — Node.js package API
 - [Next.js Guide (Client)](./packages/core-mp3/NEXTJS.md) — Web Worker integration
 - [Next.js Guide (Server)](./packages/core-mp3-node/NEXTJS.md) — API route patterns
 
@@ -111,7 +111,7 @@ See [Build Quickstart](./docs/specs/pcm-to-mp3/quickstart.md) for detailed instr
 
 The `apps/cartesia-tts` directory contains a demo that:
 1. Fetches PCM audio from Cartesia TTS
-2. Converts to MP3 using `pcm-to-mp3-wasm-node`
+2. Converts to MP3 using `ffmpeg-mp3-node`
 3. Streams the result for browser playback
 
 ```bash

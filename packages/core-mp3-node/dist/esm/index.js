@@ -1,5 +1,5 @@
 /**
- * pcm-to-mp3-wasm-node
+ * ffmpeg-mp3-node
  *
  * A minimal FFmpeg WebAssembly module for converting PCM audio to MP3 in Node.js.
  * Uses in-memory virtual filesystem (MEMFS) for zero disk I/O.
@@ -187,7 +187,7 @@ export class PcmToMp3Converter {
  *
  * @example
  * ```typescript
- * import { createConverter } from 'pcm-to-mp3-wasm-node';
+ * import { createConverter } from 'ffmpeg-mp3-node';
  *
  * const converter = await createConverter();
  *
@@ -220,7 +220,7 @@ export async function createConverter(config) {
  *
  * @example
  * ```typescript
- * import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+ * import { convertPcmToMp3 } from 'ffmpeg-mp3-node';
  *
  * const mp3Data = await convertPcmToMp3(pcmData, {
  *   sampleRate: 44100,

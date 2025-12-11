@@ -1,6 +1,6 @@
 # Next.js 16+ Integration (Web Worker)
 
-Guide for using `pcm-to-mp3-wasm` with Next.js 16+ (Turbopack) and React 19+.
+Guide for using `ffmpeg-mp3-worker` with Next.js 16+ (Turbopack) and React 19+.
 
 > [!IMPORTANT]
 > This package runs **internally in a Web Worker** to prevent blocking the UI during conversion.
@@ -9,7 +9,7 @@ Guide for using `pcm-to-mp3-wasm` with Next.js 16+ (Turbopack) and React 19+.
 > [!NOTE]
 > Next.js 16 uses Turbopack by default and has renamed `middleware.ts` to `proxy.ts`.
 
-> 💡 **Server-side Alternative**: For server-side conversion in API routes, use [`pcm-to-mp3-wasm-node`](https://www.npmjs.com/package/pcm-to-mp3-wasm-node). See [Server-Side Conversion](#server-side-conversion) section below.
+> 💡 **Server-side Alternative**: For server-side conversion in API routes, use [`ffmpeg-mp3-node`](https://www.npmjs.com/package/ffmpeg-mp3-node). See [Server-Side Conversion](#server-side-conversion) section below.
 
 
 ## Recommended: Serve WASM from `public/`
@@ -20,8 +20,8 @@ Copy the WASM files to your `public/` directory:
 
 ```bash
 # From your Next.js project root
-cp node_modules/pcm-to-mp3-wasm/dist/esm/ffmpeg-core.js public/
-cp node_modules/pcm-to-mp3-wasm/dist/esm/ffmpeg-core.wasm public/
+cp node_modules/ffmpeg-mp3-worker/dist/esm/ffmpeg-core.js public/
+cp node_modules/ffmpeg-mp3-worker/dist/esm/ffmpeg-core.wasm public/
 ```
 
 Or create a postinstall script in `package.json`:
@@ -29,7 +29,7 @@ Or create a postinstall script in `package.json`:
 ```json
 {
   "scripts": {
-    "postinstall": "cp node_modules/pcm-to-mp3-wasm/dist/esm/ffmpeg-core.* public/"
+    "postinstall": "cp node_modules/ffmpeg-mp3-worker/dist/esm/ffmpeg-core.* public/"
   }
 }
 ```
@@ -40,7 +40,7 @@ Or create a postinstall script in `package.json`:
 'use client';
 
 import { useRef, useCallback, useEffect } from 'react';
-import { createConverter, type PcmToMp3Converter } from 'pcm-to-mp3-wasm';
+import { createConverter, type PcmToMp3Converter } from 'ffmpeg-mp3-worker';
 
 export function AudioConverter() {
   const converterRef = useRef<PcmToMp3Converter | null>(null);
@@ -81,7 +81,7 @@ For simpler one-off conversions:
 'use client';
 
 async function convertPcm(pcmData: Uint8Array) {
-  const { convertPcmToMp3 } = await import('pcm-to-mp3-wasm');
+  const { convertPcmToMp3 } = await import('ffmpeg-mp3-worker');
   return convertPcmToMp3(pcmData, { sampleRate: 44100 });
 }
 ```
@@ -111,10 +111,10 @@ See [Performance Analysis](../../docs/specs/pcm-to-mp3/performance_analysis.md) 
 For server-side conversion in API routes, use the Node.js package instead:
 
 ```bash
-npm install pcm-to-mp3-wasm-node
+npm install ffmpeg-mp3-node
 ```
 
-See: [pcm-to-mp3-wasm-node Next.js Guide](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/packages/core-mp3-node/NEXTJS.md)
+See: [ffmpeg-mp3-node Next.js Guide](https://github.com/huydhoang/pcm-to-mp3-wasm/blob/main/packages/core-mp3-node/NEXTJS.md)
 
 ## Troubleshooting
 
@@ -122,4 +122,4 @@ See: [pcm-to-mp3-wasm-node Next.js Guide](https://github.com/huydhoang/pcm-to-mp
 |-------|----------|
 | WASM not found | Verify files are in `public/` and paths are correct |
 | Worker fails to load | Use dynamic import or ensure module workers are supported |
-| Large file performance | Use server-side conversion with `pcm-to-mp3-wasm-node` |
+| Large file performance | Use server-side conversion with `ffmpeg-mp3-node` |

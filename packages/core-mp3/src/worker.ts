@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 /**
- * pcm-to-mp3-wasm - Web Worker
+ * ffmpeg-mp3-worker - Web Worker
  * 
  * Runs FFmpeg WASM in a separate thread to avoid blocking the main thread.
  */

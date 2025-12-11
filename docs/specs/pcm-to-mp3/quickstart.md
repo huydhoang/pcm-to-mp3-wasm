@@ -245,8 +245,8 @@ The `apps/cartesia-tts` directory contains test applications demonstrating both 
 
 | Test Mode | Package | Filesystem | Use Case |
 |-----------|---------|------------|----------|
-| **Web Worker** | `pcm-to-mp3-wasm` | MEMFS (virtual) | Browser, Next.js client-side |
-| **Node.js Server** | `pcm-to-mp3-wasm-node` | MEMFS (in-memory) | API routes, serverless |
+| **Web Worker** | `ffmpeg-mp3-worker` | MEMFS (virtual) | Browser, Next.js client-side |
+| **Node.js Server** | `ffmpeg-mp3-node` | MEMFS (in-memory) | API routes, serverless |
 
 > [!NOTE]
 > Both tests use **MEMFS (in-memory filesystem)** with zero disk I/O.
@@ -256,7 +256,7 @@ The `apps/cartesia-tts` directory contains test applications demonstrating both 
 
 ## Test 1: Web Worker (Browser)
 
-Test the browser-compatible `pcm-to-mp3-wasm` package with a static HTML page.
+Test the browser-compatible `ffmpeg-mp3-worker` package with a static HTML page.
 
 ```bash
 npx http-server -c-1 -p 3333 --cors
@@ -268,7 +268,7 @@ Navigate to `http://localhost:3333/apps/cartesia-tts/index.html` and test with `
 
 ## Test 2: Node.js Server (In-Memory)
 
-Test the `pcm-to-mp3-wasm-node` package with a Node.js HTTP server that demonstrates **true in-memory conversion** (no disk I/O).
+Test the `ffmpeg-mp3-node` package with a Node.js HTTP server that demonstrates **true in-memory conversion** (no disk I/O).
 
 ### Prerequisites
 
@@ -337,7 +337,7 @@ warning: unsupported syscall: __syscall_getrusage
 ## Related Documentation
 
 - [Performance Analysis](./performance_analysis.md) - Benchmarks, ST vs MT trade-offs
-- [pcm-to-mp3-wasm](../../packages/core-mp3/README.md) - Browser/Web Worker package
-- [pcm-to-mp3-wasm-node](../../packages/core-mp3-node/README.md) - Node.js package
+- [ffmpeg-mp3-worker](../../packages/core-mp3/README.md) - Browser/Web Worker package
+- [ffmpeg-mp3-node](../../packages/core-mp3-node/README.md) - Node.js package
 - [Next.js Guide (Client)](../../packages/core-mp3/NEXTJS.md) - Web Worker integration
 - [Next.js Guide (Server)](../../packages/core-mp3-node/NEXTJS.md) - API route patterns

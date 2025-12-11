@@ -3,7 +3,7 @@
  * 
  * This test runs a lightweight HTTP server that:
  * 1. Fetches PCM audio from Cartesia TTS on demand
- * 2. Converts to MP3 using pcm-to-mp3-wasm-node entirely in memory (MEMFS)
+ * 2. Converts to MP3 using ffmpeg-mp3-node entirely in memory (MEMFS)
  * 3. Streams the MP3 to the browser for playback
  * 
  * Usage: npx tsx server.ts

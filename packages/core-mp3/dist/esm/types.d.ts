@@ -1,5 +1,5 @@
 /**
- * pcm-to-mp3-wasm - TypeScript type definitions
+ * ffmpeg-mp3-worker - TypeScript type definitions
  */
 export type PcmFormat = 's16le' | 's16be' | 's24le' | 's32le' | 'f32le' | 'f64le' | 'u8';
 /**

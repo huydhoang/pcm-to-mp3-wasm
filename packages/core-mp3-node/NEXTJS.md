@@ -1,8 +1,8 @@
 # Next.js 16+ Integration (Server-Side)
 
-Guide for using `pcm-to-mp3-wasm-node` in Next.js API routes for **server-side PCM-to-MP3 conversion**.
+Guide for using `ffmpeg-mp3-node` in Next.js API routes for **server-side PCM-to-MP3 conversion**.
 
-> 💡 **For client-side conversion**, use the browser package: [`pcm-to-mp3-wasm`](https://www.npmjs.com/package/pcm-to-mp3-wasm) with the [client-side Next.js guide](../core-mp3/NEXTJS.md).
+> 💡 **For client-side conversion**, use the browser package: [`ffmpeg-mp3-worker`](https://www.npmjs.com/package/ffmpeg-mp3-worker) with the [client-side Next.js guide](../core-mp3/NEXTJS.md).
 
 ## Why Server-Side?
 
@@ -16,7 +16,7 @@ Guide for using `pcm-to-mp3-wasm-node` in Next.js API routes for **server-side P
 ## Installation
 
 ```bash
-npm install pcm-to-mp3-wasm-node
+npm install ffmpeg-mp3-node
 ```
 
 ## Simple Approach (One-Shot)
@@ -25,7 +25,7 @@ For occasional conversions, use the simple one-shot API:
 
 ```typescript
 // app/api/convert/route.ts
-import { convertPcmToMp3 } from 'pcm-to-mp3-wasm-node';
+import { convertPcmToMp3 } from 'ffmpeg-mp3-node';
 
 export async function POST(request: Request) {
   const pcmData = new Uint8Array(await request.arrayBuffer());
@@ -54,7 +54,7 @@ For high-performance scenarios, **pre-load the converter** at application startu
 
 ```typescript
 // lib/mp3-converter.ts
-import { createConverter, type PcmToMp3Converter } from 'pcm-to-mp3-wasm-node';
+import { createConverter, type PcmToMp3Converter } from 'ffmpeg-mp3-node';
 
 // Singleton converter instance (loaded once, reused across requests)
 let converter: PcmToMp3Converter | null = null;
@@ -133,10 +133,10 @@ This example demonstrates:
 |-------|----------|
 | Slow first request | Expected during WASM loading, use pre-loaded converter |
 | Memory issues | Ensure Node.js has sufficient memory (`--max-old-space-size`) |
-| Module not found | Verify `pcm-to-mp3-wasm-node` is installed |
+| Module not found | Verify `ffmpeg-mp3-node` is installed |
 
 ## Related
 
 - [Performance Analysis](../../docs/specs/pcm-to-mp3/performance_analysis.md) - Benchmarks and trade-offs
 - [Client-Side Guide](../core-mp3/NEXTJS.md) - Browser/Web Worker integration
-- [pcm-to-mp3-wasm](https://www.npmjs.com/package/pcm-to-mp3-wasm) - Browser package
+- [ffmpeg-mp3-worker](https://www.npmjs.com/package/ffmpeg-mp3-worker) - Browser package

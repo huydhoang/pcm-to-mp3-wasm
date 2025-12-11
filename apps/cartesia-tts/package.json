@@ -1,7 +1,7 @@
 {
     "name": "cartesia-tts",
     "version": "1.0.0",
-    "description": "Cartesia TTS test app for pcm-to-mp3-wasm",
+    "description": "Cartesia TTS test app for ffmpeg-mp3-worker",
     "type": "module",
     "scripts": {
         "dev": "tsx server.ts"
